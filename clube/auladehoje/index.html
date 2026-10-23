@@ -161,9 +161,23 @@
   </header>
 
   <div class="player" id="player">
-    <video id="v" playsinline preload="metadata" poster="poster.jpg">
-      <source src="aula-cortada.mp4" type="video/mp4">
-    </video>
+    <!-- ⚠️ A aula inteira tem 142 MB e o GitHub recusa arquivo acima de 100 MB.
+         Por isso ela vai em HLS: 183 pedaços .ts de até 1,5 MB + a lista .m3u8,
+         cortados com `-c copy` (nenhum requadro, nenhuma perda). Safari e iPhone
+         leem .m3u8 nativamente; Chrome e Android precisam do hls.js, que está
+         aqui ao lado — nada de CDN, pra página não depender de fora. -->
+    <video id="v" playsinline preload="metadata" poster="poster.jpg"></video>
+    <script src="hls.min.js"></script>
+    <script>
+      (function(){
+        var v = document.getElementById('v'), fonte = 'hls/aula.m3u8';
+        if (v.canPlayType('application/vnd.apple.mpegurl')) { v.src = fonte; }
+        else if (window.Hls && Hls.isSupported()) {
+          var h = new Hls({maxBufferLength: 60});
+          h.loadSource(fonte); h.attachMedia(v);
+        }
+      })();
+    </script>
 
     <div class="capa" id="capa">
       <div class="bolaplay">
