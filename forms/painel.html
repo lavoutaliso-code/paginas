@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel de contatos · lailasalon</title>
+<style>
+  :root{
+    --pink:#DD0E6D; --pink-esc:#B0125B; --pink-claro:#EDB6CF; --pink-suave:#FDF2F7;
+    --ink:#1B1020; --soft:#6B5A6E; --faint:#9C8FA0;
+    --linha:rgba(27,16,32,.09); --branco:#fff; --fundo:#FBF9FB;
+    --zap:#25D366; --zap-esc:#1FB855;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--fundo);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:840px;margin:0 auto;padding:0 20px}
+
+  /* ---------- a marca ----------
+     Mesmo desenho do forms: peso 800, bem apertada e em caixa baixa. */
+  .logo{display:inline-flex;flex-direction:column;line-height:1;letter-spacing:-.045em;
+    font-weight:800;color:var(--pink)}
+  .logo small{margin-top:4px;font-size:8.5px;font-weight:600;letter-spacing:.34em;
+    color:var(--faint);text-transform:uppercase}
+
+  /* ---------- entrada ---------- */
+  .porta{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .porta .caixa{width:100%;max-width:360px;background:var(--branco);border-radius:24px;
+    padding:38px 30px 30px;text-align:center;
+    box-shadow:0 30px 70px -30px rgba(60,0,35,.28),0 0 0 1px var(--linha)}
+  .porta .logo{font-size:30px;margin-bottom:24px}
+  .porta p{margin:0 0 20px;font-size:13.5px;color:var(--soft);line-height:1.5}
+  input[type=password],input[type=text],input[type=number]{width:100%;height:50px;border-radius:14px;
+    border:2px solid var(--linha);background:var(--pink-suave);padding:0 15px;font-size:16px;
+    color:var(--ink);font-family:inherit;transition:border-color .15s,background .15s}
+  input:focus{outline:none;border-color:var(--pink);background:#fff}
+  .bt-pink{width:100%;height:52px;margin-top:14px;border:0;border-radius:14px;cursor:pointer;
+    color:#fff;font:800 15px inherit;background:linear-gradient(180deg,#FF3D95,var(--pink-esc));
+    box-shadow:0 14px 26px -10px rgba(176,18,91,.5);transition:transform .14s,filter .15s}
+  .bt-pink:active{transform:scale(.985)}
+  .bt-pink[disabled]{filter:grayscale(.4) opacity(.6);cursor:default;box-shadow:none}
+  .recado{min-height:18px;margin:12px 0 0;font-size:12.5px;font-weight:700;color:var(--pink-esc)}
+
+  /* ---------- topo ---------- */
+  header{position:sticky;top:0;z-index:20;background:rgba(251,249,251,.86);
+    backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--linha)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;
+    height:66px}
+  header .logo{font-size:21px}
+  .abas{display:flex;gap:4px;background:rgba(27,16,32,.05);padding:4px;border-radius:12px}
+  .abas button{border:0;background:none;cursor:pointer;border-radius:9px;padding:8px 15px;
+    font:700 13px inherit;color:var(--soft);transition:background .16s,color .16s}
+  .abas button.on{background:var(--branco);color:var(--pink-esc);
+    box-shadow:0 2px 6px rgba(27,16,32,.08)}
+
+  main{padding:30px 0 70px}
+  .tela{display:none}
+  .tela.on{display:block;animation:entra .3s ease both}
+  @keyframes entra{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+  /* ---------- os números ---------- */
+  .numeros{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:660px){.numeros{grid-template-columns:1fr}}
+  .n{background:var(--branco);border-radius:20px;padding:24px 22px 22px;
+    box-shadow:0 0 0 1px var(--linha)}
+  .n .rot{font-size:11px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--faint)}
+  .n .val{margin-top:10px;font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1}
+  .n .pe{margin-top:8px;font-size:12.5px;color:var(--soft)}
+  .n.destaque{background:linear-gradient(160deg,#F12282,var(--pink-esc));color:#fff;
+    box-shadow:0 22px 44px -20px rgba(176,18,91,.55)}
+  .n.destaque .rot{color:rgba(255,255,255,.72)}
+  .n.destaque .pe{color:rgba(255,255,255,.85)}
+
+  .barra{margin-top:16px;background:var(--branco);border-radius:20px;padding:22px;
+    box-shadow:0 0 0 1px var(--linha)}
+  .barra .topo{display:flex;justify-content:space-between;align-items:baseline;
+    font-size:12.5px;color:var(--soft)}
+  .barra .topo b{font-size:15px;color:var(--ink)}
+  .trilho{margin-top:12px;height:10px;border-radius:99px;background:var(--pink-suave);
+    overflow:hidden}
+  .trilho i{display:block;height:100%;border-radius:99px;
+    background:linear-gradient(90deg,#FF3D95,var(--pink-esc));width:0;
+    transition:width .6s cubic-bezier(.2,.9,.3,1)}
+  .legenda{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:12.5px;color:var(--soft)}
+  .legenda span{display:flex;align-items:center;gap:6px}
+  .pt{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+  .pt.novo{background:#8E8E93} .pt.conversa{background:#F0A500}
+  .pt.convertida{background:var(--pink)} .pt.perdida{background:#C6C6CC}
+
+  /* ---------- lista de contatos ---------- */
+  .ferramentas{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+  .busca{flex:1;min-width:200px;height:44px;border-radius:13px;border:2px solid var(--linha);
+    background:var(--branco);padding:0 14px;font-size:15px;font-family:inherit;color:var(--ink)}
+  .busca:focus{outline:none;border-color:var(--pink)}
+  .filtros{display:flex;gap:6px;flex-wrap:wrap}
+  .filtros button{border:1px solid var(--linha);background:var(--branco);cursor:pointer;
+    border-radius:99px;padding:8px 13px;font:700 12.5px inherit;color:var(--soft);
+    transition:all .16s}
+  .filtros button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+  .lista{display:flex;flex-direction:column;gap:12px}
+  .card{background:var(--branco);border-radius:18px;padding:18px;
+    box-shadow:0 0 0 1px var(--linha);display:flex;gap:14px;align-items:flex-start}
+  .card.convertida{box-shadow:0 0 0 1.6px var(--pink-claro)}
+  .ini{flex:none;width:44px;height:44px;border-radius:50%;background:var(--pink-suave);
+    color:var(--pink-esc);display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:17px}
+  .card .corpo{flex:1;min-width:0}
+  /* nome inteiro, mesmo longo: cortar com "…" esconde justo o sobrenome que
+     ela usa pra reconhecer a pessoa */
+  .card .nome{font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.28;
+    overflow-wrap:anywhere}
+  .card .meta{margin-top:3px;font-size:13px;color:var(--soft)}
+  .card .meta i{font-style:normal;color:var(--faint)}
+  .acoes{display:flex;gap:8px;align-items:center;margin-top:13px;flex-wrap:wrap}
+  .zapbt{display:inline-flex;align-items:center;gap:7px;background:var(--zap);color:#fff;
+    border:0;border-radius:12px;padding:10px 15px;font:800 13px inherit;cursor:pointer;
+    text-decoration:none;transition:background .15s,transform .14s}
+  .zapbt:hover{background:var(--zap-esc)} .zapbt:active{transform:scale(.97)}
+  .zapbt svg{width:15px;height:15px;fill:#fff}
+  /* leva pro guia da conversa, com o nome dela já dentro do roteiro */
+  .guiabt{display:inline-flex;align-items:center;background:var(--ink);color:#fff;border:0;
+    border-radius:12px;padding:10px 15px;font:800 13px inherit;cursor:pointer;
+    text-decoration:none;transition:opacity .15s,transform .14s}
+  .guiabt:hover{opacity:.86} .guiabt:active{transform:scale(.97)}
+  .estados{display:flex;gap:5px;flex-wrap:wrap}
+  .estados button{border:1px solid var(--linha);background:var(--branco);cursor:pointer;
+    border-radius:10px;padding:9px 11px;font:700 12px inherit;color:var(--soft);
+    transition:all .15s}
+  .estados button.on{background:var(--pink-suave);border-color:var(--pink-claro);
+    color:var(--pink-esc)}
+  .valorcx{display:none;align-items:center;gap:8px;margin-top:12px;background:var(--pink-suave);
+    border-radius:12px;padding:10px 12px}
+  .valorcx.on{display:flex}
+  .valorcx label{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--pink-esc);white-space:nowrap}
+  .valorcx input{height:40px;max-width:150px;border-radius:10px;background:#fff}
+  .vazio{text-align:center;padding:60px 20px;color:var(--faint);font-size:14.5px}
+  .rodape{margin-top:26px;text-align:center;font-size:12px;color:var(--faint)}
+  .salvo{font-size:11.5px;font-weight:800;color:var(--zap-esc);opacity:0;transition:opacity .2s}
+  .salvo.on{opacity:1}
+</style></head><body>
+
+<!-- ===================== entrada ===================== -->
+<div class="porta" id="porta">
+  <div class="caixa">
+    <span class="logo">lailasalon<small>gestão para salão</small></span>
+    <p>Painel de contatos.<br>Só pra quem cuida das consultoras.</p>
+    <input type="password" id="senha" placeholder="senha" autocomplete="current-password">
+    <button class="bt-pink" id="entrar">Entrar</button>
+    <p class="recado" id="recado"></p>
+  </div>
+</div>
+
+<!-- ===================== painel ===================== -->
+<div id="app" hidden>
+<header><div class="wrap">
+  <span class="logo">lailasalon<small>gestão para salão</small></span>
+  <div class="abas">
+    <button id="ab-num" class="on" onclick="verTela('num')">Painel</button>
+    <button id="ab-con" onclick="verTela('con')">Contatos</button>
+    <button onclick="location.href='vender.html'">Guia</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <!-- os números -->
+  <section class="tela on" id="t-num">
+    <div class="numeros">
+      <div class="n">
+        <div class="rot">Contatos capturados</div>
+        <div class="val" id="v-cap">—</div>
+        <div class="pe" id="p-cap">&nbsp;</div>
+      </div>
+      <div class="n">
+        <div class="rot">Contatos convertidos</div>
+        <div class="val" id="v-conv">—</div>
+        <div class="pe" id="p-conv">&nbsp;</div>
+      </div>
+      <div class="n destaque">
+        <div class="rot">Valor total vendido</div>
+        <div class="val" id="v-total">—</div>
+        <div class="pe" id="p-total">&nbsp;</div>
+      </div>
+    </div>
+
+    <div class="barra">
+      <div class="topo"><span>De cada 100 que deixam contato, <b id="v-taxa">—</b> fecham</span>
+        <span id="v-ticket"></span></div>
+      <div class="trilho"><i id="v-tri"></i></div>
+      <div class="legenda">
+        <span><i class="pt novo"></i> <b id="c-novo">0</b>&nbsp;sem falar ainda</span>
+        <span><i class="pt conversa"></i> <b id="c-conversa">0</b>&nbsp;em conversa</span>
+        <span><i class="pt convertida"></i> <b id="c-convertida">0</b>&nbsp;fechou</span>
+        <span><i class="pt perdida"></i> <b id="c-perdida">0</b>&nbsp;não quis</span>
+      </div>
+    </div>
+    <p class="rodape" id="rod-num"></p>
+  </section>
+
+  <!-- a lista -->
+  <section class="tela" id="t-con">
+    <div class="ferramentas">
+      <input class="busca" id="busca" placeholder="procurar por nome ou telefone" type="text">
+      <div class="filtros" id="filtros">
+        <button class="on" data-f="todos">Todos</button>
+        <button data-f="novo">Sem falar</button>
+        <button data-f="conversa">Em conversa</button>
+        <button data-f="convertida">Fechou</button>
+        <button data-f="perdida">Não quis</button>
+      </div>
+    </div>
+    <div class="lista" id="lista"></div>
+    <p class="rodape"><span class="salvo" id="salvo">salvo ✓</span></p>
+  </section>
+</main>
+</div>
+
+<script>
+(function(){
+  var API = '/api/leads';
+  var SENHA = '';
+  var DADOS = [];
+  var filtro = 'todos', busca = '';
+
+  var ESTADOS = [
+    {k:'novo',       r:'Sem falar'},
+    {k:'conversa',   r:'Em conversa'},
+    {k:'convertida', r:'Fechou'},
+    {k:'perdida',    r:'Não quis'}
+  ];
+
+  /* ---------- entrada ---------- */
+  var cSenha = document.getElementById('senha');
+  var cBt    = document.getElementById('entrar');
+  var cRec   = document.getElementById('recado');
+
+  cSenha.addEventListener('keydown', function(e){ if(e.key === 'Enter') entrar(); });
+  cBt.addEventListener('click', entrar);
+
+  function entrar(){
+    var s = cSenha.value.trim();
+    if(!s){ cRec.textContent = 'digite a senha'; return; }
+    cBt.disabled = true; cBt.textContent = 'Entrando…'; cRec.textContent = '';
+    buscar(s).then(function(r){
+      if(r.erro){
+        cBt.disabled = false; cBt.textContent = 'Entrar';
+        cRec.textContent = r.erro === 'senha errada' ? 'essa senha não é a do painel' : r.erro;
+        return;
+      }
+      SENHA = s;
+      try{ sessionStorage.setItem('lls-painel', s); }catch(e){}
+      document.getElementById('porta').style.display = 'none';
+      document.getElementById('app').hidden = false;
+      guardar(r.contatos);
+    });
+  }
+
+  function buscar(s){
+    return fetch(API, {headers:{'x-senha': s}})
+      .then(function(r){ return r.json(); })
+      .catch(function(){ return {erro:'não consegui falar com o servidor'}; });
+  }
+
+  /* a sessão sobrevive ao F5, mas some quando ela fecha a aba */
+  try{
+    var g = sessionStorage.getItem('lls-painel');
+    if(g){ cSenha.value = g; entrar(); }
+  }catch(e){}
+
+  function guardar(lista){
+    DADOS = lista.sort(function(a,b){ return new Date(b.quando) - new Date(a.quando); });
+    pintarNumeros(); pintarLista();
+  }
+
+  /* ---------- telas ---------- */
+  window.verTela = function(qual){
+    document.getElementById('t-num').classList.toggle('on', qual === 'num');
+    document.getElementById('t-con').classList.toggle('on', qual === 'con');
+    document.getElementById('ab-num').classList.toggle('on', qual === 'num');
+    document.getElementById('ab-con').classList.toggle('on', qual === 'con');
+  };
+
+  /* ---------- os números ---------- */
+  var dinheiro = new Intl.NumberFormat('pt-BR',
+    {style:'currency', currency:'BRL', maximumFractionDigits:0});
+
+  function pintarNumeros(){
+    var cap = DADOS.length;
+    var conta = {novo:0, conversa:0, convertida:0, perdida:0};
+    var total = 0;
+    DADOS.forEach(function(c){
+      conta[c.estado] = (conta[c.estado] || 0) + 1;
+      if(c.estado === 'convertida') total += (c.valor || 0);
+    });
+    var conv = conta.convertida;
+    var taxa = cap ? Math.round(conv * 100 / cap) : 0;
+
+    document.getElementById('v-cap').textContent   = cap;
+    document.getElementById('v-conv').textContent  = conv;
+    document.getElementById('v-total').textContent = dinheiro.format(total);
+    document.getElementById('v-taxa').textContent  = taxa;
+    document.getElementById('v-tri').style.width   = taxa + '%';
+
+    /* pé de cada número: o mês corrente, no fuso de Brasília */
+    var agora = new Date();
+    var mes = DADOS.filter(function(c){ return mesmoMes(new Date(c.quando), agora); });
+    var mesConv = mes.filter(function(c){ return c.estado === 'convertida'; });
+    var mesTotal = mesConv.reduce(function(a,c){ return a + (c.valor||0); }, 0);
+    document.getElementById('p-cap').textContent   = mes.length + ' neste mês';
+    document.getElementById('p-conv').textContent  = mesConv.length + ' neste mês';
+    document.getElementById('p-total').textContent = dinheiro.format(mesTotal) + ' neste mês';
+    document.getElementById('v-ticket').textContent =
+      conv ? ('cada uma vale ' + dinheiro.format(total / conv)) : '';
+
+    ['novo','conversa','convertida','perdida'].forEach(function(k){
+      document.getElementById('c-' + k).textContent = conta[k] || 0;
+    });
+    document.getElementById('rod-num').textContent = cap
+      ? ('último contato ' + quando(DADOS[0].quando))
+      : 'nenhum contato ainda — quando alguém preencher o forms, aparece aqui';
+  }
+
+  /* tudo que ela lê é hora de Brasília, mesmo se o Mac estiver em outro fuso */
+  function emBrasilia(d){
+    return new Date(d.toLocaleString('en-US', {timeZone:'America/Sao_Paulo'}));
+  }
+  function mesmoMes(a, b){
+    a = emBrasilia(a); b = emBrasilia(b);
+    return a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
+  }
+  function quando(iso){
+    var d = new Date(iso);
+    return d.toLocaleString('pt-BR',
+      {timeZone:'America/Sao_Paulo', day:'2-digit', month:'2-digit',
+       hour:'2-digit', minute:'2-digit'});
+  }
+
+  /* ---------- a lista ---------- */
+  function so(t){ return String(t || '').replace(/\D/g, ''); }
+
+  function bonito(t){
+    var d = so(t);
+    if(d.length === 11) return '(' + d.slice(0,2) + ') ' + d.slice(2,7) + '-' + d.slice(7);
+    if(d.length === 10) return '(' + d.slice(0,2) + ') ' + d.slice(2,6) + '-' + d.slice(6);
+    return t || '—';
+  }
+
+  /* o WhatsApp quer o número com o 55 na frente e sem pontuação nenhuma */
+  function zap(c){
+    var d = so(c.telefone);
+    if(d.length === 10 || d.length === 11) d = '55' + d;
+    var primeiro = (c.nome || '').trim().split(/\s+/)[0] || '';
+    var texto = 'Oi ' + primeiro + '! Aqui é da lailasalon 💗 Vi que você deixou seu contato ' +
+                'pra conhecer a Anamnese Inteligente. Posso te mostrar como funciona?';
+    return 'https://wa.me/' + d + '?text=' + encodeURIComponent(texto);
+  }
+
+  function cabe(c){
+    if(filtro !== 'todos' && c.estado !== filtro) return false;
+    if(!busca) return true;
+    return (c.nome + ' ' + c.telefone + ' ' + so(c.telefone)).toLowerCase()
+             .indexOf(busca) >= 0;
+  }
+
+  function pintarLista(){
+    var alvo = document.getElementById('lista');
+    var ver = DADOS.filter(cabe);
+    alvo.innerHTML = '';
+
+    if(!ver.length){
+      var v = document.createElement('p'); v.className = 'vazio';
+      v.textContent = DADOS.length ? 'nenhum contato com esse filtro'
+                                   : 'nenhum contato ainda';
+      alvo.appendChild(v); return;
+    }
+
+    ver.forEach(function(c){
+      var el = document.createElement('div');
+      el.className = 'card' + (c.estado === 'convertida' ? ' convertida' : '');
+      el.innerHTML =
+        '<div class="ini">' + ((c.nome || '?').trim().charAt(0).toUpperCase()) + '</div>' +
+        '<div class="corpo">' +
+          '<div class="nome"></div>' +
+          '<div class="meta"><span class="tel"></span> <i>·</i> <span class="dt"></span></div>' +
+          '<div class="acoes">' +
+            '<a class="guiabt" target="_blank" rel="noopener">▶ Atender</a>' +
+            '<a class="zapbt" target="_blank" rel="noopener">' +
+              '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1112 20zm4.5-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.5 6.5 0 01-3.2-2.8c-.1-.2 0-.4.1-.5l.4-.5.2-.4v-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a1 1 0 00-.7.3c-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.2.7 3 .6.5-.1 1.4-.6 1.6-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.4-.3z"/></svg>' +
+              'WhatsApp</a>' +
+            '<div class="estados"></div>' +
+          '</div>' +
+          '<div class="valorcx"><label>fechou por</label>' +
+            '<input type="number" min="0" step="10" placeholder="0"></div>' +
+        '</div>';
+
+      el.querySelector('.nome').textContent = c.nome || 'sem nome';
+      el.querySelector('.tel').textContent = bonito(c.telefone);
+      el.querySelector('.dt').textContent = quando(c.quando);
+      el.querySelector('.zapbt').href = zap(c);
+      /* abre o guia da conversa já com esta lead escolhida */
+      el.querySelector('.guiabt').href = 'vender.html?lead=' + encodeURIComponent(c.id);
+
+      var caixa = el.querySelector('.estados');
+      ESTADOS.forEach(function(e){
+        var b = document.createElement('button');
+        b.textContent = e.r;
+        if(c.estado === e.k) b.className = 'on';
+        b.onclick = function(){ marcar(c, e.k, el); };
+        caixa.appendChild(b);
+      });
+
+      var cx = el.querySelector('.valorcx');
+      var iv = cx.querySelector('input');
+      cx.classList.toggle('on', c.estado === 'convertida');
+      if(c.valor) iv.value = c.valor;
+      /* grava quando ela sai do campo, não a cada tecla: 3 dígitos não são 3 gravações */
+      iv.onchange = function(){
+        c.valor = Number(iv.value) || 0;
+        salvar({id:c.id, estado:c.estado, valor:c.valor});
+        pintarNumeros();
+      };
+
+      alvo.appendChild(el);
+    });
+  }
+
+  function marcar(c, novo, el){
+    c.estado = novo;
+    salvar({id:c.id, estado:novo, valor:c.valor || 0});
+    /* repinta só este cartão: a lista inteira faria o campo de valor perder o foco */
+    el.classList.toggle('convertida', novo === 'convertida');
+    el.querySelectorAll('.estados button').forEach(function(b, i){
+      b.classList.toggle('on', ESTADOS[i].k === novo);
+    });
+    el.querySelector('.valorcx').classList.toggle('on', novo === 'convertida');
+    pintarNumeros();
+    if(filtro !== 'todos' && novo !== filtro) setTimeout(pintarLista, 260);
+  }
+
+  var aviso = document.getElementById('salvo');
+  function salvar(corpo){
+    return fetch(API, {method:'POST',
+        headers:{'content-type':'application/json', 'x-senha': SENHA},
+        body: JSON.stringify(corpo)})
+      .then(function(r){
+        if(!r.ok) throw 0;
+        aviso.textContent = 'salvo ✓'; aviso.style.color = '';
+        aviso.classList.add('on'); setTimeout(function(){ aviso.classList.remove('on'); }, 1400);
+      })
+      /* ⚠️ nunca fingir que salvou: se falhar, ela precisa saber pra marcar de novo */
+      .catch(function(){
+        aviso.textContent = 'não salvou — tenta de novo';
+        aviso.style.color = '#B0125B'; aviso.classList.add('on');
+      });
+  }
+
+  /* ---------- busca e filtros ---------- */
+  document.getElementById('busca').addEventListener('input', function(e){
+    busca = e.target.value.trim().toLowerCase(); pintarLista();
+  });
+  document.getElementById('filtros').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    filtro = b.dataset.f;
+    this.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === b); });
+    pintarLista();
+  });
+
+  /* volta do servidor de tempos em tempos: contato novo aparece sozinho */
+  setInterval(function(){
+    if(!SENHA || document.hidden) return;
+    buscar(SENHA).then(function(r){ if(r && r.contatos) guardar(r.contatos); });
+  }, 60000);
+})();
+</script>
+</body></html>

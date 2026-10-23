@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>O funil de vendas que gerou 72 agendamentos em uma semana</title>
+<!-- ⭐ O FUNIL DA AULA. Esta linha é o que faz a venda vinda daqui chegar
+     com nome. Antes dela, o botão abaixo ia pra landing PELADO e toda
+     compra da aula caía em "Não sabemos" no painel.
+     `data-funil="aula"` diz: esta página É a boca do funil `aula`.
+     A partir disso o rastro.js, sozinho:
+       · conta quem abriu a aula      (etapa "Abriram a aula")
+       · conta quem clicou no botão   (etapa "Clicaram no botão")
+       · CARIMBA o botão com ?utm_campaign=aula — ninguém escreve à mão
+     ⚠️ Não troque o botão por um link escrito com parâmetro na mão: o dia
+        em que alguém copiar o href sem os parâmetros, a medição morre em
+        silêncio e o painel segue mostrando número plausível. -->
+<script src="https://lala-landing.netlify.app/rastro.js" data-funil="aula" defer></script>
+<style>
+  :root{
+    --preto:#0E0E12;
+    --preto2:#131318;
+    --rosa:#F63D78;
+    --rosa-claro:#FFD3E3;
+    --creme:#EFE7DE;
+    --branco:#FFFFFF;
+    --cinza:#6E6E78;
+    --linha:rgba(14,14,18,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--branco);color:var(--preto);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  .wrap{width:min(720px,calc(100% - 40px));margin:0 auto}
+  .rotulo{
+    font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--cinza);padding-bottom:12px;border-bottom:1px solid var(--linha);margin-bottom:22px;
+  }
+  mark{background:var(--rosa-claro);color:inherit;padding:0 .12em;border-radius:3px}
+
+  /* topo */
+  header{padding:64px 0 36px}
+  h1{
+    font-size:clamp(30px,5.2vw,46px);line-height:1.1;font-weight:700;letter-spacing:-.025em;
+  }
+  .sub{margin-top:18px;font-size:17px;color:var(--cinza);max-width:34em}
+  .aovivo{
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:20px;
+    font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--rosa);
+  }
+  .aovivo span{width:7px;height:7px;border-radius:50%;background:var(--rosa)}
+
+  /* player */
+  .player{
+    position:relative;background:var(--preto);border-radius:20px;overflow:hidden;
+    box-shadow:0 24px 60px rgba(14,14,18,.14);
+  }
+  .player video{display:block;width:100%;aspect-ratio:16/10;background:#000;object-fit:contain;cursor:pointer}
+  .capa{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(14,14,18,.42);backdrop-filter:blur(1px);cursor:pointer;transition:opacity .25s
+  }
+  .capa.off{opacity:0;pointer-events:none}
+  .bolaplay{
+    width:84px;height:84px;border-radius:50%;background:var(--rosa);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 40px rgba(246,61,120,.5);transition:transform .2s
+  }
+  .capa:hover .bolaplay{transform:scale(1.07)}
+  .bolaplay svg{margin-left:5px}
+
+  .ctrl{
+    display:flex;align-items:center;gap:14px;padding:12px 16px 14px;
+    background:var(--preto2);color:#fff;flex-wrap:wrap;
+  }
+  .ctrl button{
+    background:transparent;border:0;color:#fff;cursor:pointer;display:flex;align-items:center;
+    padding:6px;border-radius:9px;opacity:.85;transition:opacity .15s,background .15s;
+  }
+  .ctrl button:hover{opacity:1;background:rgba(255,255,255,.1)}
+  .barra{
+    flex:1 1 220px;height:6px;border-radius:99px;background:rgba(255,255,255,.18);
+    position:relative;cursor:pointer;min-width:140px;
+  }
+  .barra i{position:absolute;inset:0 auto 0 0;width:0;border-radius:99px;background:var(--rosa)}
+  .barra b{
+    position:absolute;top:50%;left:0;width:13px;height:13px;border-radius:50%;background:#fff;
+    transform:translate(-50%,-50%);box-shadow:0 2px 6px rgba(0,0,0,.4)
+  }
+  .tempo{font-size:13px;font-variant-numeric:tabular-nums;opacity:.8;white-space:nowrap}
+  .vel{
+    font-size:12px;font-weight:700;letter-spacing:.04em;padding:6px 10px;border-radius:99px;
+    background:rgba(255,255,255,.12)
+  }
+  .dica{margin-top:14px;font-size:13px;color:var(--cinza);text-align:center}
+
+  /* conteudo */
+  section{padding:56px 0}
+  .itens{border-top:1px solid var(--linha)}
+  .item{display:flex;gap:14px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--linha);font-size:17px}
+  .check{
+    flex:none;width:26px;height:26px;border-radius:50%;background:var(--rosa-claro);
+    display:flex;align-items:center;justify-content:center;margin-top:1px
+  }
+  .numeros{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+  .num{background:var(--creme);border-radius:16px;padding:22px 16px;text-align:center}
+  .num strong{display:block;font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1}
+  .num span{display:block;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cinza)}
+
+  /* oferta */
+  .oferta{background:var(--creme);border-radius:24px;padding:40px 32px;text-align:center}
+  .oferta .rotulo{border:0;padding:0;margin-bottom:14px}
+  .oferta h2{font-size:clamp(24px,4vw,32px);letter-spacing:-.02em;line-height:1.15}
+  .de{margin-top:26px;font-size:16px;color:var(--cinza)}
+  .de s{text-decoration-thickness:2px;text-decoration-color:var(--rosa)}
+  .preco{margin:4px 0 6px;font-size:52px;font-weight:700;letter-spacing:-.03em}
+  .preco em{font-style:normal;background:var(--rosa-claro);border-radius:5px;padding:0 .08em}
+  .parc{font-size:15px;color:var(--cinza)}
+  .escondida{display:none}
+  .entra{animation:sobe .45s ease both}
+  @keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .relogio{margin-top:26px}
+  .rel-rotulo{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--rosa);margin-bottom:12px}
+  .rel-caixas{display:flex;gap:10px;justify-content:center}
+  .cx{
+    background:var(--preto);color:#fff;border-radius:16px;
+    width:86px;padding:14px 6px 12px;
+  }
+  .cx strong{display:block;font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+  .cx span{display:block;margin-top:7px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+  .cta{
+    display:block;margin:30px auto 0;max-width:420px;
+    background:var(--rosa);color:#fff;text-decoration:none;font-size:18px;font-weight:600;
+    padding:20px 28px;border-radius:99px;box-shadow:0 14px 34px rgba(246,61,120,.34);
+    transition:transform .18s,box-shadow .18s;
+  }
+  .cta:hover{transform:translateY(-2px);box-shadow:0 18px 42px rgba(246,61,120,.42)}
+  .selo{margin-top:16px;font-size:14px;color:var(--cinza)}
+
+  footer{padding:50px 0 70px;text-align:center;font-size:13px;color:var(--cinza)}
+
+  @media (max-width:560px){
+    header{padding:44px 0 28px}
+    .numeros{grid-template-columns:1fr;gap:10px}
+    .oferta{padding:32px 20px}
+    .tempo{font-size:12px}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="aovivo"><span></span>Aula gravada · acesso liberado</div>
+    <h1>O funil de vendas que gerou <mark>72 agendamentos</mark> em uma semana</h1>
+  </header>
+
+  <div class="player" id="player">
+    <video id="v" playsinline preload="metadata" poster="poster.jpg">
+      <source src="aula-cortada.mp4" type="video/mp4">
+    </video>
+
+    <div class="capa" id="capa">
+      <div class="bolaplay">
+        <svg width="28" height="32" viewBox="0 0 28 32" fill="#fff"><path d="M0 2.2C0 .6 1.7-.4 3.1.4l24 13.8c1.4.8 1.4 2.8 0 3.6l-24 13.8C1.7 32.4 0 31.4 0 29.8V2.2z"/></svg>
+      </div>
+    </div>
+
+    <div class="ctrl">
+      <button id="bPlay" title="Pausar / continuar" aria-label="Pausar ou continuar">
+        <svg id="icPlay" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M2 1.4c0-1 1-1.6 1.9-1.1l14.5 8.6c.9.5.9 1.8 0 2.3L3.9 19.8C3 20.3 2 19.7 2 18.7V1.4z"/></svg>
+        <svg id="icPause" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="display:none"><rect x="3" y="1" width="5" height="18" rx="1.6"/><rect x="12" y="1" width="5" height="18" rx="1.6"/></svg>
+      </button>
+
+      <button id="bStop" title="Parar e voltar ao início" aria-label="Parar">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><rect x="1" y="1" width="16" height="16" rx="3"/></svg>
+      </button>
+
+      <div class="barra" id="barra"><i id="prog"></i><b id="bolinha"></b></div>
+
+      <div class="tempo"><span id="agora">0:00</span> / <span id="total">--:--</span></div>
+
+      <button id="bVel" title="Velocidade" aria-label="Velocidade"><span class="vel" id="velTxt">1×</span></button>
+
+      <button id="bMudo" title="Som" aria-label="Som">
+        <svg id="icSom" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M9.5 2.3 5.4 5.8H2.4c-.6 0-1 .5-1 1v6.4c0 .6.4 1 1 1h3L9.5 18c.6.5 1.6.1 1.6-.7V3c0-.8-1-1.2-1.6-.7z"/><path d="M13.4 6a1 1 0 0 0-.2 1.4 4.2 4.2 0 0 1 0 5.2 1 1 0 1 0 1.6 1.2 6.2 6.2 0 0 0 0-7.6 1 1 0 0 0-1.4-.2z"/></svg>
+        <svg id="icMudo" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="display:none"><path d="M9.5 2.3 5.4 5.8H2.4c-.6 0-1 .5-1 1v6.4c0 .6.4 1 1 1h3L9.5 18c.6.5 1.6.1 1.6-.7V3c0-.8-1-1.2-1.6-.7z"/><path d="M18.4 7.6a1 1 0 0 0-1.4-1.4L15 8.2l-2-2a1 1 0 1 0-1.4 1.4l2 2-2 2a1 1 0 1 0 1.4 1.4l2-2 2 2a1 1 0 0 0 1.4-1.4l-2-2 2-2z"/></svg>
+      </button>
+
+      <button id="bTela" title="Tela cheia" aria-label="Tela cheia">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6V1h5M12 1h5v5M17 12v5h-5M6 17H1v-5"/></svg>
+      </button>
+    </div>
+  </div>
+  <p class="dica">Barra de espaço pausa e continua. A aula guarda onde você parou.</p>
+
+  <section id="secItens">
+    <div class="rotulo">O que tem dentro da aula</div>
+    <div class="itens">
+      <div class="item"><div class="check"><svg width="13" height="10" viewBox="0 0 13 10" fill="none" stroke="#F63D78" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5.2 4.6 8.8 12 1.4"/></svg></div><div>Os <mark>6 passos do funil</mark> na ordem: saudação, descoberta, condução, prova, oferta e fechamento</div></div>
+      <div class="item"><div class="check"><svg width="13" height="10" viewBox="0 0 13 10" fill="none" stroke="#F63D78" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5.2 4.6 8.8 12 1.4"/></svg></div><div>Onde a conversa morre de verdade, e quantas clientes somem em cada etapa</div></div>
+      <div class="item"><div class="check"><svg width="13" height="10" viewBox="0 0 13 10" fill="none" stroke="#F63D78" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5.2 4.6 8.8 12 1.4"/></svg></div><div>Por que <mark>não dar o preço antes</mark> dela falar a dor dela</div></div>
+      <div class="item"><div class="check"><svg width="13" height="10" viewBox="0 0 13 10" fill="none" stroke="#F63D78" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5.2 4.6 8.8 12 1.4"/></svg></div><div>Como a Lalá responde isso sozinha, 24 horas por dia, no seu WhatsApp</div></div>
+    </div>
+  </section>
+
+  <section id="secOferta" class="escondida">
+    <div class="oferta">
+      <div class="rotulo">A atendente que faz esse funil por você</div>
+      <h2>A Lalá atende, conduz e <mark>marca o horário</mark></h2>
+      <div class="de">de <s>R$ 497,00</s> por</div>
+      <div class="preco">R$ <em>97</em>,00</div>
+      <div class="parc">pagamento único · em até 12× no cartão</div>
+
+      <div class="relogio">
+        <div class="rel-rotulo">esse preço cai em</div>
+        <div class="rel-caixas">
+          <div class="cx"><strong id="rH">00</strong><span>horas</span></div>
+          <div class="cx"><strong id="rM">00</strong><span>min</span></div>
+          <div class="cx"><strong id="rS">00</strong><span>seg</span></div>
+        </div>
+      </div>
+      <a class="cta" href="https://lala-landing.netlify.app" target="_blank" rel="noopener">Quero a Lalá no meu WhatsApp</a>
+      <div class="selo">Implantação feita por nós · entrada imediata</div>
+    </div>
+  </section>
+
+  <footer>Lavou Tá Liso · Izabela Laila</footer>
+</div>
+
+<script>
+  const v = document.getElementById('v');
+  const capa = document.getElementById('capa');
+  const barra = document.getElementById('barra');
+  const prog = document.getElementById('prog');
+  const bolinha = document.getElementById('bolinha');
+  const agora = document.getElementById('agora');
+  const total = document.getElementById('total');
+  const icPlay = document.getElementById('icPlay');
+  const icPause = document.getElementById('icPause');
+  const icSom = document.getElementById('icSom');
+  const icMudo = document.getElementById('icMudo');
+  const velTxt = document.getElementById('velTxt');
+  const CHAVE = 'vsl-funil-72-ponto';
+  const VELS = [1, 1.25, 1.5, 1.75, 2];
+  let iVel = 0;
+
+  const rel = s => {
+    if (!isFinite(s)) return '--:--';
+    s = Math.floor(s);
+    const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), g = s % 60;
+    const dois = n => String(n).padStart(2, '0');
+    return h ? h + ':' + dois(m) + ':' + dois(g) : m + ':' + dois(g);
+  };
+
+  function pintar(){
+    const pc = v.duration ? v.currentTime / v.duration * 100 : 0;
+    prog.style.width = pc + '%';
+    bolinha.style.left = pc + '%';
+    agora.textContent = rel(v.currentTime);
+  }
+
+  function alterna(){
+    if (v.paused) v.play(); else v.pause();
+  }
+
+  v.addEventListener('loadedmetadata', () => {
+    total.textContent = rel(v.duration);
+    const salvo = parseFloat(localStorage.getItem(CHAVE) || '0');
+    if (salvo > 5 && salvo < v.duration - 10) { v.currentTime = salvo; pintar(); }
+  });
+  // na metade do vídeo, a lista dá lugar à oferta
+  const secItens = document.getElementById('secItens');
+  const secOferta = document.getElementById('secOferta');
+  let trocou = false;
+  function talvezTrocar(){
+    if (trocou || !v.duration) return;
+    if (v.currentTime / v.duration < 0.5) return;
+    trocou = true;
+    secItens.classList.add('escondida');
+    secOferta.classList.remove('escondida');
+    secOferta.classList.add('entra');
+  }
+
+  v.addEventListener('timeupdate', () => {
+    pintar();
+    talvezTrocar();
+    if (v.currentTime > 5 && Math.floor(v.currentTime) % 5 === 0) localStorage.setItem(CHAVE, v.currentTime);
+  });
+  v.addEventListener('play', () => {
+    capa.classList.add('off');
+    icPlay.style.display = 'none'; icPause.style.display = '';
+  });
+  v.addEventListener('pause', () => {
+    icPlay.style.display = ''; icPause.style.display = 'none';
+  });
+  v.addEventListener('ended', () => {
+    localStorage.removeItem(CHAVE);
+    capa.classList.remove('off');
+  });
+
+  capa.onclick = () => v.play();
+  v.onclick = alterna;
+  document.getElementById('bPlay').onclick = alterna;
+
+  document.getElementById('bStop').onclick = () => {
+    v.pause(); v.currentTime = 0; pintar();
+    localStorage.removeItem(CHAVE);
+    capa.classList.remove('off');
+  };
+
+  document.getElementById('bMudo').onclick = () => {
+    v.muted = !v.muted;
+    icSom.style.display = v.muted ? 'none' : '';
+    icMudo.style.display = v.muted ? '' : 'none';
+  };
+
+  document.getElementById('bVel').onclick = () => {
+    iVel = (iVel + 1) % VELS.length;
+    v.playbackRate = VELS[iVel];
+    velTxt.textContent = String(VELS[iVel]).replace('.', ',') + '×';
+  };
+
+  document.getElementById('bTela').onclick = () => {
+    const p = document.getElementById('player');
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (p.requestFullscreen) p.requestFullscreen();
+    else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+  };
+
+  // arrastar a barra
+  let arrastando = false;
+  const pular = e => {
+    const r = barra.getBoundingClientRect();
+    const x = ((e.touches ? e.touches[0].clientX : e.clientX) - r.left) / r.width;
+    if (v.duration) { v.currentTime = Math.max(0, Math.min(1, x)) * v.duration; pintar(); }
+  };
+  barra.addEventListener('mousedown', e => { arrastando = true; pular(e); });
+  window.addEventListener('mousemove', e => { if (arrastando) pular(e); });
+  window.addEventListener('mouseup', () => { arrastando = false; });
+  barra.addEventListener('touchstart', e => { pular(e); }, {passive:true});
+  barra.addEventListener('touchmove', e => { pular(e); }, {passive:true});
+
+  // relógio da oferta: ciclo de 3 horas que reinicia sozinho
+  const CICLO = 3 * 60 * 60 * 1000;
+  const rH = document.getElementById('rH');
+  const rM = document.getElementById('rM');
+  const rS = document.getElementById('rS');
+  function relogio(){
+    const falta = CICLO - (Date.now() % CICLO);
+    const s = Math.floor(falta / 1000);
+    const dois = n => String(n).padStart(2, '0');
+    rH.textContent = dois(Math.floor(s / 3600));
+    rM.textContent = dois(Math.floor(s % 3600 / 60));
+    rS.textContent = dois(s % 60);
+  }
+  relogio();
+  setInterval(relogio, 1000);
+
+  // espaço pausa/continua
+  window.addEventListener('keydown', e => {
+    if (e.code === 'Space' && e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
+      e.preventDefault(); alterna();
+    }
+  });
+</script>
+</body>
+</html>

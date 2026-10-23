@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Clube das Empresárias · acesso vitalício</title>
+<meta name="description" content="600 empresárias beauty num grupo só. Aula ao vivo toda semana com a Izabela Laila, tudo gravado, networking de verdade. Acesso vitalício por R$ 97,00.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="assets/foto-grupo.png">
+<link rel="apple-touch-icon" href="assets/foto-grupo.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Clube das Empresárias">
+<meta property="og:description" content="600 empresárias beauty num grupo só. Aula ao vivo toda semana com a Izabela Laila. Acesso vitalício por R$ 97,00.">
+<meta property="og:image" content="assets/foto-grupo.png">
+<meta property="og:locale" content="pt_BR">
+<link rel="stylesheet" href="clube2.css">
+<script src="clube2.js"></script>
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+   O 5C, limpo. O que saiu e por quê:
+     · a seta de caneta "é aqui dentro" — rabisco não combina com premium
+     · o degradê que apagava a base dos prints — ninguém lê texto sumindo
+     · as três provas do rodapé — repetiam o COMO FUNCIONA
+   O que entrou:
+     · a COPY APROVADA de volta, no tamanho de título que ela tinha
+     · o bloco do grupo em PRETO, pra tela não ser branca de ponta a ponta
+     · A AULA DE HOJE com cabeça, tema e nome — antes era um relógio solto
+     · as setas do carrossel NA LATERAL do print, onde o dedo procura
+     · o 97 grifado
+   ══════════════════════════════════════════════════════════════════════ */
+body{background:#fff}
+
+/* ── a capa ────────────────────────────────────────────────────────── */
+.capa{padding:40px 22px 0}
+h1{font-size:37px; line-height:1.04; font-weight:600; letter-spacing:-.045em}
+h1 .g{background:var(--grifo); border-radius:5px; padding:0 6px; margin:0 -4px;
+  box-decoration-break:clone; -webkit-box-decoration-break:clone}
+.lead{margin-top:16px; font-size:14.5px; line-height:1.58; color:var(--cinza)}
+.lead b{color:var(--tinta); font-weight:600}
+
+/* ── o grupo, em preto ─────────────────────────────────────────────── */
+.grupo{margin:28px 22px 0; background:#0E0E12; border-radius:20px;
+  padding:16px 18px; display:flex; align-items:center; gap:14px}
+.grupo .foto{position:relative; flex:none}
+.grupo .pf{width:62px; height:62px; border-radius:50%; display:block;
+  box-shadow:0 10px 24px -8px rgba(246,61,120,.65)}
+.grupo .foto i{position:absolute; right:1px; bottom:1px; width:13px; height:13px;
+  border-radius:50%; background:#30D158; border:2.5px solid #0E0E12; display:block}
+.grupo .tx{flex:1; min-width:0}
+.grupo b{display:block; font-size:18px; font-weight:600; letter-spacing:-.035em;
+  color:#fff; white-space:nowrap}
+.grupo .qtd{display:block; margin-top:5px; font-size:12.5px; color:#8A8A93}
+
+/* ── seções ────────────────────────────────────────────────────────── */
+.sec{margin-top:26px; padding:0 22px}
+.sec>.cab{margin-bottom:6px; padding-bottom:12px; border-bottom:1px solid var(--linha);
+  font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase}
+
+/* ── A AULA DE HOJE: cabeça, relógio e tema, numa peça só ──────────── */
+.aula{margin-top:12px; border:1px solid var(--linha); border-radius:20px;
+  padding:18px 16px 16px; text-align:center; background:#FCFCFD}
+.aula .et{display:inline-flex; align-items:center; gap:7px; color:var(--pink);
+  font-size:10.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase}
+.aula .et i{width:6px; height:6px; border-radius:50%; background:#FF3B30; display:block;
+  box-shadow:0 0 0 0 rgba(255,59,48,.55); animation:bate 1.9s ease-out infinite}
+.aula h2{margin-top:11px; font-size:21px; font-weight:600; letter-spacing:-.035em; line-height:1.2}
+.aula .blocos{margin-top:14px}
+.aula .tema{margin-top:14px; padding-top:13px; border-top:1px solid var(--linha);
+  font-size:13.5px; line-height:1.5; color:var(--tinta)}
+.aula .tema span{display:block; margin-top:6px; font-size:12px; color:var(--cinza)}
+
+/* ── o carrossel: sem degradê, com as setas na lateral do print ────── */
+.tira{margin-top:14px; position:relative}
+.tira .trilho{padding:0 22px 2px; margin:0 -22px}
+.tira .slide{flex-basis:256px}
+.tira .print{height:290px}   /* ~442px de iPhone à mostra, cortados secos */
+.lat{position:absolute; top:46%; transform:translateY(-50%); z-index:5;
+  width:38px; height:38px; border-radius:50%; border:0;
+  background:#121216; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#fff; box-shadow:0 8px 20px -6px rgba(18,18,22,.5);
+  transition:background .14s, transform .14s}
+.lat:hover{background:#000; transform:translateY(-50%) scale(1.06)}
+.lat svg{width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.1;
+  stroke-linecap:round; stroke-linejoin:round}
+.lat.esq{left:0} .lat.dir{right:0}
+.conta-pe{margin-top:12px; text-align:center; font-size:11.5px; color:var(--cinza);
+  font-variant-numeric:tabular-nums}
+
+/* ── o fecho: crachá, preço e botão ────────────────────────────────── */
+.fecho{margin-top:26px; padding:22px 22px 30px; border-top:1px solid var(--linha)}
+.caixa-fim{display:flex; align-items:center; gap:18px; margin-bottom:18px}
+.caixa-fim .cracha{width:104px; flex:none; filter:drop-shadow(0 16px 24px rgba(18,18,22,.26))}
+.preco .de{display:block; font-size:10.5px; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--cinza)}
+.preco b{display:block; margin-top:8px; font-size:42px; line-height:1; font-weight:600;
+  letter-spacing:-.05em; font-variant-numeric:tabular-nums}
+.preco b mark{padding:0 6px; border-radius:6px}
+.preco .pg{display:block; margin-top:9px; font-size:12.5px; color:var(--cinza)}
+.fecho .pag{margin-top:12px; font-size:12px; color:var(--cinza); text-align:center}
+@media (prefers-reduced-motion: reduce){ .aula .et i, .lat{animation:none; transition:none} }
+</style>
+</head><body>
+
+<header class="capa">
+  <h1>O lugar onde 600 empresárias beauty <span class="g">crescem juntas</span>.</h1>
+</header>
+
+<section class="grupo">
+  <span class="foto"><img class="pf" src="assets/foto-grupo.png" alt="Foto do grupo Clube das Empresárias"><i></i></span>
+  <span class="tx"><b>Clube das Empresárias</b><span class="qtd">600 participantes · 48 online</span></span>
+</section>
+
+<section class="sec">
+  <div class="cab">Como funciona a comunidade</div>
+  <ul class="checks" data-como></ul>
+</section>
+
+<section class="sec">
+  <div class="cab">A aula de hoje</div>
+  <div class="aula">
+    <span class="et"><i></i><span data-chamada>ao vivo · hoje às 17h</span></span>
+    <h2>A próxima aula começa em</h2>
+    <div class="blocos">
+      <div class="bl"><b id="hh">00</b><span>horas</span></div>
+      <div class="bl"><b id="mm">00</b><span>min</span></div>
+      <div class="bl"><b id="ss">00</b><span>seg</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec tira carrossel">
+  <div class="cab">Dentro do grupo</div>
+  <div class="trilho"></div>
+  <button class="lat esq" data-ant aria-label="conversa anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lat dir" data-prox aria-label="próxima conversa"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <p class="conta-pe"><span class="conta"></span></p>
+</section>
+
+<footer class="fecho">
+  <div class="caixa-fim">
+    <div class="cracha"><img src="assets/cracha.png" alt="Crachá de integrante do Clube das Empresárias"></div>
+    <div class="preco">
+      <span class="de">acesso vitalício</span>
+      <b>R$ <mark>97</mark>,00</b>
+      <span class="pg">uma vez só, para sempre</span>
+    </div>
+  </div>
+  <a class="bt-comprar" href="https://pay.kiwify.com.br/Pr0k5Ez" rel="noopener" data-bt>Comprar meu acesso vitalício ao clube</a>
+  <p class="pag">Pagamento único · entrada imediata no grupo</p>
+</footer>
+
+</body></html>

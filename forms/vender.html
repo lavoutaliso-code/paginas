@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Guia da conversa · lailasalon</title>
+<style>
+  :root{
+    --pink:#DD0E6D; --pink-esc:#B0125B; --pink-claro:#EDB6CF; --pink-suave:#FDF2F7;
+    --ink:#1B1020; --soft:#6B5A6E; --faint:#9C8FA0;
+    --linha:rgba(27,16,32,.10); --branco:#fff; --fundo:#FBF9FB;
+    --verde:#1E9E5A; --verde-suave:#E9F7EF;
+    --amarelo:#B4780A; --amarelo-suave:#FFF6E3;
+    --vermelho:#C0261B; --vermelho-suave:#FDECEA; --zap:#25D366;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--fundo);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .logo{display:inline-flex;flex-direction:column;line-height:1;letter-spacing:-.045em;
+    font-weight:800;color:var(--pink)}
+  .logo small{margin-top:3px;font-size:8px;font-weight:600;letter-spacing:.34em;
+    color:var(--faint);text-transform:uppercase}
+
+  /* ---------- entrada ---------- */
+  .porta{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .porta .caixa{width:100%;max-width:350px;background:var(--branco);border-radius:24px;
+    padding:36px 28px 28px;text-align:center;
+    box-shadow:0 30px 70px -30px rgba(60,0,35,.28),0 0 0 1px var(--linha)}
+  .porta .logo{font-size:29px;margin-bottom:20px}
+  .porta p{margin:0 0 16px;font-size:13.5px;color:var(--soft)}
+  input,select,textarea{font-family:inherit}
+  input[type=password]{width:100%;height:50px;border-radius:14px;border:2px solid var(--linha);
+    background:var(--pink-suave);padding:0 15px;font-size:16px;color:var(--ink)}
+  input:focus{outline:none;border-color:var(--pink);background:#fff}
+  .bt-pink{width:100%;height:52px;margin-top:12px;border:0;border-radius:14px;cursor:pointer;
+    color:#fff;font:800 15px inherit;background:linear-gradient(180deg,#FF3D95,var(--pink-esc))}
+  .recado{min-height:16px;margin:10px 0 0;font-size:12.5px;font-weight:700;color:var(--pink-esc)}
+
+  /* ---------- moldura ---------- */
+  #app{display:flex;flex-direction:column;height:100dvh}
+  header{flex:none;border-bottom:1px solid var(--linha);background:var(--branco)}
+  .cab{max-width:1000px;margin:0 auto;padding:0 18px;height:54px;display:flex;
+    align-items:center;gap:12px}
+  .cab .logo{font-size:16px}
+  .quem{flex:1;min-width:0}
+  .quem select{height:32px;border-radius:10px;border:1.5px solid var(--linha);background:#fff;
+    padding:0 8px;font-size:13px;font-weight:700;color:var(--ink);max-width:220px;width:100%}
+  .voltar{font-size:12.5px;font-weight:700;color:var(--soft);text-decoration:none;
+    border:1.5px solid var(--linha);border-radius:10px;padding:7px 11px;white-space:nowrap}
+  .relogio{display:none;align-items:center;gap:7px;background:var(--ink);color:#fff;
+    border-radius:10px;padding:6px 11px;font-weight:800;font-size:13px;white-space:nowrap}
+  .relogio.on{display:flex}
+  .relogio.acabou{background:var(--vermelho)}
+  .relogio i{width:7px;height:7px;border-radius:50%;background:#4ADE80;
+    animation:pisca 1.1s ease-in-out infinite}
+  @keyframes pisca{0%,100%{opacity:1}50%{opacity:.25}}
+  .relogio.acabou i{background:#FCA5A5;animation:none}
+
+  /* capítulos — só o nome do trecho, sem conteúdo */
+  .caps{max-width:1000px;margin:0 auto;padding:0 18px 8px;display:flex;gap:5px;overflow-x:auto;
+    scrollbar-width:none}
+  .caps::-webkit-scrollbar{display:none}
+  .caps button{flex:none;border:0;background:none;cursor:pointer;border-radius:99px;
+    padding:5px 11px;font:700 12px inherit;color:var(--faint)}
+  .caps button.on{background:var(--ink);color:#fff}
+  .caps button.feito{color:var(--pink-esc)}
+
+  /* ---------- o cartão: UMA coisa ---------- */
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+  .card{width:100%;max-width:780px;text-align:center;animation:entra .2s ease both}
+  @keyframes entra{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .elem{width:96px;height:96px;margin:0 auto 22px;border-radius:50%;
+    background:var(--pink-suave);display:flex;align-items:center;justify-content:center;
+    font-size:46px;line-height:1;box-shadow:0 12px 28px -12px rgba(176,18,91,.35)}
+  .elem.escuro{background:var(--ink)}
+  .elem.zap{background:#DFF6E6}
+
+  .frase{margin:0;font-size:clamp(26px,4.4vw,44px);font-weight:700;letter-spacing:-.03em;
+    line-height:1.2}
+  .frase em{font-style:normal;color:var(--pink-esc)}
+  .dica{margin:16px 0 0;font-size:15px;color:var(--faint);font-weight:600}
+
+  .card.acao .frase{font-size:clamp(22px,3.4vw,34px);font-weight:700}
+  .card.acao .elem{background:var(--ink);color:#fff}
+  .card.pausa .frase{color:var(--soft);font-size:clamp(22px,3.2vw,32px)}
+  .card.pausa .elem{background:var(--ink)}
+
+  .valor{font-size:clamp(52px,11vw,104px);font-weight:800;letter-spacing:-.045em;line-height:1;
+    color:var(--pink-esc)}
+  .rotulo{margin-top:10px;font-size:15px;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--faint)}
+
+  .resposta{margin:24px auto 0;max-width:340px}
+  .resposta input{width:100%;height:64px;border-radius:16px;border:2px solid var(--linha);
+    background:#fff;padding:0 18px;font-size:26px;font-weight:800;text-align:center;
+    color:var(--ink)}
+  .resposta input:focus{outline:none;border-color:var(--pink)}
+  .resposta .pre{font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--faint);margin-bottom:8px}
+
+  .escala{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+  .escala button{width:52px;height:52px;border-radius:14px;border:1.5px solid var(--linha);
+    background:#fff;cursor:pointer;font:800 18px inherit;color:var(--soft)}
+  .escala button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .veredito{margin:22px auto 0;max-width:520px;border-radius:16px;padding:16px 18px;
+    font-size:17px;font-weight:600}
+  .veredito.vai{background:var(--verde-suave);color:#0F5D34}
+  .veredito.espera{background:var(--amarelo-suave);color:#6B4A05}
+  .veredito.para{background:var(--vermelho-suave);color:#7A1A12}
+
+  .chips{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+  .chips button{border:1.5px solid var(--linha);background:#fff;cursor:pointer;border-radius:99px;
+    padding:9px 15px;font:700 14px inherit;color:var(--soft)}
+  .chips button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+  /* dor de um lado, a virada do outro. Curto: é pra bater o olho, não ler. */
+  .ds{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;margin:26px auto 0;
+    text-align:left}
+  @media(max-width:600px){.ds{grid-template-columns:1fr}}
+  .ds>div{border-radius:16px;padding:14px 16px}
+  .ds .dor{background:#FDECEA}
+  .ds .sol{background:var(--pink-suave);box-shadow:inset 0 0 0 1.5px var(--pink-claro)}
+  .ds i{font-style:normal;display:block;font-size:10.5px;font-weight:800;letter-spacing:.14em;
+    text-transform:uppercase;margin-bottom:6px}
+  .ds .dor i{color:var(--vermelho)} .ds .sol i{color:var(--pink-esc)}
+  .ds p{margin:0;font-size:15.5px;font-weight:600;line-height:1.35;color:var(--ink)}
+  .bt{border:0;border-radius:14px;cursor:pointer;font:800 15px inherit;padding:0 22px;height:50px}
+  .bt.sec{background:#fff;color:var(--ink);box-shadow:0 0 0 1.5px var(--linha)}
+  .bt.pri{background:var(--ink);color:#fff}
+  .bt.zap{background:var(--zap);color:#fff}
+  .bt.rosa{background:var(--pink);color:#fff}
+  .bt:active{transform:scale(.985)}
+  .linha{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .copiavel{width:100%;max-width:520px;margin:20px auto 0;min-height:108px;border-radius:16px;
+    border:2px solid var(--linha);background:#fff;padding:14px;font-size:14px;color:var(--ink);
+    resize:vertical;line-height:1.45;display:block;text-align:left}
+  .anota{width:100%;max-width:520px;margin:14px auto 0;min-height:66px;border-radius:16px;
+    border:2px solid var(--linha);background:#fff;padding:12px 14px;font-size:15px;
+    color:var(--ink);resize:vertical;display:block;text-align:left}
+  .anota:focus{outline:none;border-color:var(--pink)}
+  .ok{display:block;margin-top:12px;font-size:13px;font-weight:800;color:var(--verde);
+    opacity:0;transition:opacity .2s}
+  .ok.on{opacity:1}
+  .aviso{margin:20px auto 0;max-width:560px;border-radius:16px;padding:14px 16px;font-size:15px}
+  .aviso.am{background:var(--amarelo-suave);color:#6B4A05}
+  .aviso.vm{background:var(--vermelho-suave);color:#7A1A12}
+  a.link{color:var(--pink-esc);font-weight:700}
+
+  /* ---------- rodapé ---------- */
+  .pe{flex:none;border-top:1px solid var(--linha);background:var(--branco)}
+  .pe .d{max-width:1000px;margin:0 auto;padding:11px 18px;display:flex;gap:10px;align-items:center}
+  .pe .onde{flex:1;font-size:13px;color:var(--faint);font-weight:700;text-align:center}
+  .ajuda{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--linha);background:#fff;
+    cursor:pointer;font:800 14px inherit;color:var(--faint);flex:none}
+  .nota{display:none;max-width:1000px;margin:0 auto;padding:0 18px 10px;font-size:13.5px;
+    color:var(--soft)}
+  .nota.on{display:block}
+</style></head><body>
+
+<div class="porta" id="porta">
+  <div class="caixa">
+    <span class="logo">lailasalon<small>gestão para salão</small></span>
+    <p>Guia da conversa.<br>A mesma senha do painel.</p>
+    <input type="password" id="senha" placeholder="senha" autocomplete="current-password">
+    <button class="bt-pink" id="entrar">Entrar</button>
+    <p class="recado" id="recado"></p>
+  </div>
+</div>
+
+<div id="app" hidden>
+<header>
+  <div class="cab">
+    <span class="logo">lailasalon<small>gestão para salão</small></span>
+    <div class="quem"><select id="lead"><option value="">— sem lead —</option></select></div>
+    <div class="relogio" id="relogio"><i></i><span id="relogio-txt"></span></div>
+    <a class="voltar" href="painel.html">Painel</a>
+  </div>
+  <div class="caps" id="caps"></div>
+</header>
+
+<main><div class="card" id="palco"></div></main>
+
+<p class="nota" id="nota"></p>
+<div class="pe"><div class="d">
+  <button class="bt sec" id="ant">←</button>
+  <span class="onde" id="onde"></span>
+  <button class="ajuda" id="ajuda">?</button>
+  <button class="bt pri" id="prox">Próximo →</button>
+</div></div>
+</div>
+
+<script>
+(function(){
+  /* ==================== O QUE CUSTA ====================
+     Confirmado por ela em 02/09: implantação R$1.297 + R$99,90/mês, fechando com
+     link de pagamento na própria chamada.
+     ⚠️ `condicao.implantacao` é o único número que EU escolhi — ela pediu uma
+     condição de 1 hora e não deu o valor. */
+  var PRECO = { implantacao:1297, mensal:99.90,
+    condicao:{ implantacao:897, janelaMin:60,
+      porque:'a agenda de implantação da semana tem lugar limitado' } };
+
+  var API='/api/leads', SENHA='', LEADS=[], ATUAL=null, i=0, R={};
+  var din=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+  var d0=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+  function num(v){ v=String(v==null?'':v).replace(/\./g,'').replace(',','.').replace(/[^\d.]/g,'');
+    var n=parseFloat(v); return isFinite(n)?n:0; }
+  function horaBR(ms){ return new Date(ms).toLocaleTimeString('pt-BR',
+    {timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'}); }
+  function soD(t){ return String(t||'').replace(/\D/g,''); }
+
+  var cS=document.getElementById('senha'), cB=document.getElementById('entrar'),
+      cR=document.getElementById('recado');
+  cS.addEventListener('keydown',function(e){ if(e.key==='Enter') entrar(); });
+  cB.addEventListener('click',entrar);
+  function entrar(){
+    var s=cS.value.trim(); if(!s){ cR.textContent='digite a senha'; return; }
+    cB.disabled=true; cB.textContent='Entrando…';
+    fetch(API,{headers:{'x-senha':s}}).then(function(r){return r.json();}).then(function(j){
+      if(j.erro){ cB.disabled=false; cB.textContent='Entrar';
+        cR.textContent=j.erro==='senha errada'?'essa senha não é a do painel':j.erro; return; }
+      SENHA=s; try{ sessionStorage.setItem('lls-painel',s); }catch(e){}
+      document.getElementById('porta').style.display='none';
+      document.getElementById('app').hidden=false;
+      LEADS=j.contatos||[]; leads(); capitulos(); ir(0); setInterval(tique,1000);
+    }).catch(function(){ cB.disabled=false; cB.textContent='Entrar';
+      cR.textContent='não consegui falar com o servidor'; });
+  }
+  try{ var g=sessionStorage.getItem('lls-painel'); if(g){ cS.value=g; entrar(); } }catch(e){}
+
+  function chave(){ return 'lls-call-'+(ATUAL?ATUAL.id:'sem-lead'); }
+  function carregar(){ try{ R=JSON.parse(localStorage.getItem(chave())||'{}'); }catch(e){ R={}; } }
+  function guardar(){ try{ localStorage.setItem(chave(),JSON.stringify(R)); }catch(e){} }
+  function leads(){
+    var sel=document.getElementById('lead');
+    LEADS.forEach(function(c){ var o=document.createElement('option'); o.value=c.id;
+      o.textContent=(c.nome||'sem nome'); sel.appendChild(o); });
+    /* a lead volta sozinha depois de um F5: recarregar no meio da chamada não
+       pode zerar as anotações nem o relógio da condição */
+    var q=new URLSearchParams(location.search).get('lead');
+    if(!q){ try{ q=localStorage.getItem('lls-ultima-lead'); }catch(e){} }
+    if(q&&LEADS.some(function(c){return c.id===q;})) sel.value=q;
+    sel.onchange=function(){
+      ATUAL=LEADS.filter(function(c){return c.id===sel.value;})[0]||null;
+      try{ localStorage.setItem('lls-ultima-lead',sel.value||''); }catch(e){}
+      carregar(); ir(i); tique();
+    };
+    sel.onchange();
+  }
+  /* muita gente preenche o forms em CAIXA ALTA. "Oi JULIETE!" na tela parece
+     grito e atrapalha a leitura em voz alta — o primeiro nome entra normalizado. */
+  function nome(){
+    if(!ATUAL||!ATUAL.nome) return 'você';
+    var n=ATUAL.nome.trim().split(/\s+/)[0];
+    return n.charAt(0).toUpperCase()+n.slice(1).toLowerCase();
+  }
+
+  function armar(){ R.prazo=Date.now()+PRECO.condicao.janelaMin*60000; guardar(); tique(); ir(i); }
+  function falta(){ return R.prazo? R.prazo-Date.now() : null; }
+  function tique(){
+    var el=document.getElementById('relogio'), tx=document.getElementById('relogio-txt'), f=falta();
+    if(f===null){ el.classList.remove('on'); return; }
+    el.classList.add('on');
+    if(f<=0){ el.classList.add('acabou'); tx.textContent='venceu '+horaBR(R.prazo); return; }
+    el.classList.remove('acabou');
+    tx.textContent=Math.floor(f/60000)+':'+String(Math.floor((f%60000)/1000)).padStart(2,'0');
+  }
+
+  function contas(){
+    var F=num(R.faturamento),P=num(R.perda),Q=num(R.quimicas);
+    var c={F:F,P:P,Q:Q};
+    c.dia=PRECO.mensal/30;
+    c.pct=F>0? PRECO.mensal*100/F : null;
+    c.pctPerda=P>0? PRECO.mensal*100/P : null;
+    c.ano=P*12;
+    c.porQ=Q>0? PRECO.mensal/(Q*4.33) : null;
+    /* em R$99,90 "2% do faturamento" só vale pra salão de R$5 mil; num de R$30
+       mil é 0,33%. A frase muda de faixa em vez de repetir um número fixo. */
+    c.frase=(c.pct===null)?null:(c.pct<0.5?'menos de meio por cento':
+             (c.pct<1?'menos de um por cento':c.pct.toFixed(1).replace('.',',')+'%'));
+    return c;
+  }
+
+  /* =================================================================
+     UMA COISA POR TELA.
+     Cada cartão é: um elemento (o ícone), uma frase, e nada mais.
+     `f` = frase pra falar · `a` = ação da SDR · `p` = pausa (calar)
+     `n` = número · `campo` = pergunta com resposta · `esc` = escolha
+     ⚠️ Nada aqui desqualifica cliente. Salão pequeno também é cliente.
+     ================================================================= */
+  var C = [
+   {c:'Abrir', t:'a', e:'📱', f:'Ficha aberta numa aba do lado',
+    d:'anamneselavoutaliso.netlify.app',
+    nota:'Você vai mostrar ao vivo daqui a pouco.'},
+   {c:'Abrir', t:'a', e:'🔗', f:'Link de pagamento copiado',
+    nota:'Procurar link no meio do fechamento esfria a venda.'},
+   {c:'Abrir', t:'f', e:'👋', f:function(){return '“Oi '+nome()+'! Aqui é da <em>lailasalon</em>.”';}},
+   {c:'Abrir', t:'f', e:'✅', f:'“Foi você que pediu contato, né?”',
+    nota:'Confirmar tira a ligação do lugar de telemarketing.'},
+   {c:'Abrir', t:'f', e:'⏱️', f:'“Tem 10 minutinhos?”',
+    d:'se não puder: “hoje mais tarde ou amanhã cedo?”'},
+   {c:'Abrir', t:'f', e:'🙋', f:'“Posso te fazer 4 perguntas do seu salão?”',
+    nota:'Quem pergunta conduz. Perguntar antes de mostrar.'},
+
+   {c:'Conhecer', t:'f', e:'🧪', f:'“Vocês fazem química? Coloração, progressiva?”'},
+   {c:'Conhecer', t:'campo', e:'👥', f:'“Quantas profissionais trabalham aí?”',
+    k:'equipe', ph:'4',
+    dor:'Com equipe, ninguém controla no olho.',
+    sol:'Você passa a saber o que cada uma usou.'},
+   {c:'Conhecer', t:'campo', e:'📆', f:'“Quantas químicas por semana?”',
+    k:'quimicas', ph:'12'},
+   {c:'Conhecer', t:'f', e:'📋', f:'“Vocês têm ficha hoje? Onde ela fica?”',
+    dor:'Papel na gaveta some, molha, e ninguém acha.',
+    sol:'Fica salva — e volta quando a cliente volta.'},
+
+   {c:'Onde dói', t:'f', e:'📦', f:'“Você sabe quanto de produto sai por mês?”',
+    dor:'Ela não sabe. Quase ninguém sabe.',
+    sol:'A ficha registra grama por grama, por atendimento.'},
+   {c:'Onde dói', t:'p', e:'🤫', f:'Cale. Conte até três.',
+    nota:'O silêncio depois dessa pergunta é a venda inteira.'},
+   {c:'Onde dói', t:'f', e:'😖', f:'“O que acontece quando acaba no meio da aplicação?”',
+    dor:'Cliente esperando e compra às pressas.',
+    sol:'A dose é calculada antes de começar.'},
+   {c:'Onde dói', t:'f', e:'⚠️', f:'“Já teve cliente com problema depois de uma química?”',
+    dor:'Retoque de graça e medo de processo.',
+    sol:'A resposta dela fica registrada, com data.'},
+   {c:'Onde dói', t:'campo', e:'💸', f:'“Quanto você acha que some por mês?”',
+    k:'perda', pre:'R$', ph:'800',
+    nota:'É ela quem diz o número. Número dito por ela não se discute depois.'},
+   {c:'Onde dói', t:'n', e:'📉',
+    v:function(){var c=contas(); return c.P>0? d0.format(c.ano):null;},
+    r:'no ano isso é',
+    f:function(){var c=contas(); return c.P>0?
+      '“'+nome()+', no ano isso é <em>'+d0.format(c.ano)+'</em>.”':
+      'Preencha quanto ela disse que some.';}},
+   {c:'Onde dói', t:'campo', e:'💰', f:'“Qual o faturamento por mês, mais ou menos?”',
+    k:'faturamento', pre:'R$', ph:'30000',
+    d:'“é pra eu te mostrar o preço na sua proporção”',
+    nota:'A mais delicada, por último — e sempre colada na justificativa.'},
+
+   {c:'Medir', t:'esc', e:'🌡️', f:'“De 0 a 10, o quanto isso é prioridade <em>hoje</em>?”'},
+
+   {c:'Mostrar', t:'a', e:'🖥️', f:'Compartilhe a tela e abra a ficha',
+    d:'“responde comigo como se você fosse a cliente”'},
+   {c:'Mostrar', t:'f', e:'📱', f:'“A cliente responde no tablet enquanto espera.”',
+    dor:'Hoje a espera é a cliente parada no celular.',
+    sol:'A espera vira parte do atendimento.'},
+   {c:'Mostrar', t:'f', e:'⚖️', f:'“O sistema calcula a <em>dose exata</em>, em gramas.”',
+    d:'pare aqui e mostre a balança',
+    dor:'Dose no olho gasta a mais e varia de mão pra mão.',
+    sol:'Gramas exatas, igual em qualquer profissional.'},
+   {c:'Mostrar', t:'f', e:'📖', f:'“E quando ela voltar, o histórico está lá.”',
+    dor:'“O que a gente usou da última vez mesmo?”',
+    sol:'Abre a ficha e continua de onde parou.'},
+   {c:'Mostrar', t:'f', e:'👀', f:'“Dá pra ver sua equipe usando isso?”',
+    nota:'Quem se imagina usando já está meio comprando.'},
+
+   {c:'Ganhos', t:'f', e:'✨', f:'“Você vira o salão que tem isso na cidade.”',
+    dor:'Todo salão promete o mesmo pela mesma foto.',
+    sol:'Esse é o que a cliente conta pras amigas.'},
+   {c:'Ganhos', t:'f', e:'📦', f:'“E passa a saber o que sai de produto.”'},
+   {c:'Ganhos', t:'f', e:'🛡️', f:'“Fica tudo registrado, com data.”'},
+   {c:'Ganhos', t:'f', e:'📖', f:'“E o histórico da cliente guardado pra quando ela voltar.”'},
+
+   {c:'Preço', t:'f', e:'🏷️', f:function(){
+      return '“Implantação <em>'+d0.format(PRECO.implantacao)+'</em>, uma vez só.”';}},
+   {c:'Preço', t:'f', e:'📅', f:function(){
+      return '“Depois <em>'+din.format(PRECO.mensal)+'</em> por mês.”';}},
+   {c:'Preço', t:'n', e:'📊',
+    v:function(){var c=contas(); return c.frase;},
+    r:'do faturamento dela',
+    f:function(){var c=contas(); return c.F>0?
+      '“No seu faturamento isso é <em>'+c.frase+'</em>.”':
+      'Preencha o faturamento pra ver a proporção.';}},
+   {c:'Preço', t:'n', e:'☕',
+    v:function(){return din.format(PRECO.mensal/30);},
+    r:'por dia',
+    f:'“Dá <em>menos que um café</em> por dia.”'},
+   {c:'Preço', t:'n', e:'🔁',
+    v:function(){var c=contas(); return c.pctPerda!==null? c.pctPerda.toFixed(0)+'%':null;},
+    r:'do que ela já perde',
+    f:function(){var c=contas(); return c.P>0?
+      '“Você perde '+d0.format(c.P)+' por mês. Isso é <em>'+c.pctPerda.toFixed(0)+
+      '%</em> disso.”' : 'Preencha quanto ela disse que some.';}},
+   {c:'Preço', t:'p', e:'🤐', f:'Agora cale.',
+    nota:'Quem fala primeiro depois do preço, perde.'},
+
+   {c:'Condição', t:'f', e:'🎁', f:function(){
+      return '“Pra quem decide na conversa: implantação por <em>'+
+        d0.format(PRECO.condicao.implantacao)+'</em>.”';}},
+   {c:'Condição', t:'f', e:'📋', f:function(){
+      return '“Não é pressão — '+PRECO.condicao.porque+'.”';},
+    nota:'Ordem: oferta, razão, prazo. Prazo antes da razão vira ameaça.'},
+   {c:'Condição', t:'f', e:'⏳', f:'“Vale por <em>1 hora</em> depois da gente desligar.”'},
+   {c:'Condição', t:'relogio', e:'⏱️', f:'Comece a contar agora'},
+   {c:'Condição', t:'msg', e:'💬', f:'Mande por escrito, ainda na linha'},
+
+   {c:'Objeções', t:'obj', e:'💭', f:'O que ela disse?'},
+
+   {c:'Fechar', t:'n', e:'🚀',
+    v:function(){ return din.format(PRECO.mensal/30); },
+    r:'por dia',
+    f:function(){ return '“Por <em>'+din.format(PRECO.mensal/30)+
+      ' por dia</em>, você leva essa tecnologia pro seu salão <em>hoje</em>.”'; },
+    nota:'A frase de fechar. Diga exatamente assim, e depois cale.'},
+   {c:'Fechar', t:'f', e:'📤', f:'“Te mando o link agora e a gente marca o treinamento.”'},
+   {c:'Fechar', t:'f', e:'💳', f:'“Prefere <em>cartão</em> ou <em>Pix</em>?”',
+    nota:'Pergunta fechada pula a decisão de comprar.'},
+   {c:'Fechar', t:'a', e:'🎓', f:'Fale do treinamento enquanto ela paga',
+    nota:'Move a cabeça dela de "estou gastando" pra "já começou".'},
+   {c:'Fechar', t:'a', e:'📅', f:'Marque dia e hora assim que cair'},
+   {c:'Fechar', t:'f', e:'📞', f:'“Te ligo <em>quinta às 10h</em>. Pode ser?”',
+    d:'só se ela não fechar hoje',
+    nota:'Nunca termine com “qualquer coisa me chama”.'},
+
+   {c:'Registrar', t:'reg', e:'💾', f:'Como terminou?'}
+  ];
+
+  function txt(v){ return typeof v==='function'? v() : v; }
+
+  /* ---------- desenho ---------- */
+  function capitulos(){
+    var el=document.getElementById('caps'); el.innerHTML='';
+    var vistos=[];
+    C.forEach(function(c,k){ if(vistos.indexOf(c.c)<0){ vistos.push(c.c);
+      var b=document.createElement('button'); b.textContent=c.c; b.dataset.i=k;
+      b.onclick=function(){ ir(k); }; el.appendChild(b); } });
+  }
+
+  function ir(k){
+    i=Math.max(0,Math.min(C.length-1,k));
+    var c=C[i], corpo='';
+    var cls = c.t==='a'?'acao' : (c.t==='p'?'pausa':'');
+    var elem='<div class="elem'+(c.t==='p'||c.t==='a'?' escuro':'')+'">'+c.e+'</div>';
+
+    if(c.t==='n'){
+      var v=txt(c.v);
+      corpo = elem + (v? '<div class="valor">'+v+'</div><div class="rotulo">'+c.r+'</div>' : '')+
+        '<p class="frase" style="margin-top:'+(v?'22px':'0')+';font-size:clamp(20px,3.2vw,32px)">'+
+        txt(c.f)+'</p>';
+    } else if(c.t==='campo'){
+      corpo = elem + '<p class="frase">'+txt(c.f)+'</p>'+
+        (c.d?'<p class="dica">'+c.d+'</p>':'')+
+        '<div class="resposta">'+(c.pre?'<div class="pre">'+c.pre+'</div>':'')+
+        '<input type="text" inputmode="decimal" id="campo" placeholder="'+(c.ph||'')+'"></div>';
+    } else if(c.t==='esc'){
+      var t=R.temp, ver='';
+      if(t!==undefined&&t!==''){
+        ver = Number(t)>=8
+          ? '<div class="veredito vai">Pode ir pro preço. Emende: “o que faria ser 10?”</div>'
+          : (Number(t)>=5
+            ? '<div class="veredito espera">Ainda não. Pergunte <b>“por que não menos?”</b></div>'
+            : '<div class="veredito para">Não fale preço. Volte e ache a dor.</div>');
+      }
+      corpo = elem + '<p class="frase">'+txt(c.f)+'</p><div class="escala" id="escala">'+
+        [0,1,2,3,4,5,6,7,8,9,10].map(function(n){
+          return '<button data-t="'+n+'"'+(String(t)===String(n)?' class="on"':'')+'>'+n+'</button>';
+        }).join('')+'</div>'+ver;
+    } else if(c.t==='relogio'){
+      var f=falta(), painel;
+      if(f===null) painel='<div class="linha"><button class="bt rosa" id="armar">'+
+        '▶ Comecei a contar</button></div>';
+      else if(f>0) painel='<div class="valor">'+Math.floor(f/60000)+' min</div>'+
+        '<div class="rotulo">vence às '+horaBR(R.prazo)+'</div>';
+      else painel='<div class="aviso vm"><b>Venceu às '+horaBR(R.prazo)+'.</b> Não reofereça.</div>';
+      corpo = elem + '<p class="frase" style="font-size:clamp(22px,3.4vw,34px)">'+txt(c.f)+
+        '</p>'+painel;
+    } else if(c.t==='msg'){
+      var m='Oi '+nome()+'! Aqui é da lailasalon 💗\n\nSua condição de hoje:\n'+
+        '• Implantação '+d0.format(PRECO.condicao.implantacao)+' (em vez de '+
+        d0.format(PRECO.implantacao)+')\n• Mensalidade '+din.format(PRECO.mensal)+'\n'+
+        (R.prazo?'\nVale até '+horaBR(R.prazo)+' de hoje.\n':'\n')+
+        '\nLink: [COLE AQUI]\n\nAssim que cair eu te mando o dia do treinamento.';
+      corpo = elem + '<p class="frase" style="font-size:clamp(22px,3.4vw,34px)">'+txt(c.f)+'</p>'+
+        '<textarea class="copiavel" id="msg">'+m+'</textarea>'+
+        '<div class="linha"><button class="bt sec" id="copiar">Copiar</button>'+
+        '<button class="bt zap" id="mandar">WhatsApp</button></div>'+
+        '<span class="ok" id="ok-msg">copiado ✓</span>';
+    } else if(c.t==='obj'){
+      var cc=contas();
+      var O=[
+       {q:'Está caro', a:['“Caro comparado com o quê?”',
+          '“'+din.format(cc.dia)+' por dia. Se sumir <em>uma</em> química, já pagou.”']},
+       {q:'Vou pensar', a:['“É o <em>valor</em>, a <em>equipe</em>, ou se <em>funciona</em>?”']},
+       {q:'Falar com meu marido', a:['“Se dependesse só de você, você faria?”']},
+       {q:'Equipe não vai usar', a:['“Quem preenche é a <em>cliente</em>, não sua equipe.”']},
+       {q:'Já tenho ficha', a:['“E onde ela está agora?”']},
+       {q:'Mês que vem', a:['“O que muda mês que vem que não muda hoje?”']},
+       {q:'E se eu não gostar', a:['“Cancela a mensalidade. A implantação fica com você.”']}
+      ];
+      var k2=R.obj===undefined?0:Number(R.obj);
+      corpo = '<div class="chips" id="chips">'+O.map(function(o,n){
+          return '<button data-o="'+n+'"'+(n===k2?' class="on"':'')+'>'+o.q+'</button>';
+        }).join('')+'</div>'+ elem +
+        O[k2].a.map(function(l){return '<p class="frase">'+l+'</p>';}).join('');
+    } else if(c.t==='reg'){
+      var tot=PRECO.condicao.implantacao+PRECO.mensal;
+      corpo = elem + '<p class="frase">'+txt(c.f)+'</p>'+
+        '<div class="chips" id="fecho" style="margin-top:24px">'+
+          '<button data-e="conversa">Em conversa</button>'+
+          '<button data-e="convertida">Fechou</button>'+
+          '<button data-e="perdida">Não quis</button></div>'+
+        '<div class="resposta"><div class="pre">valor fechado</div>'+
+          '<input type="text" inputmode="decimal" id="campo" placeholder="'+
+          String(tot.toFixed(2)).replace('.',',')+'"></div>'+
+        '<textarea class="anota" id="anota" placeholder="o que ficou combinado"></textarea>'+
+        '<div class="linha"><button class="bt zap" id="registrar">Salvar no painel</button></div>'+
+        '<span class="ok" id="ok2">salvo ✓</span>'+
+        (ATUAL?'':'<div class="aviso am">Escolha a lead lá em cima.</div>');
+    } else {
+      corpo = elem + '<p class="frase">'+txt(c.f)+'</p>'+
+        (c.d?'<p class="dica">'+c.d+'</p>':'');
+    }
+    /* o quadro dor × virada entra por baixo de qualquer cartão que tenha os dois.
+       A régua: cada par sobe um degrau de consciência — primeiro ela enxerga o
+       problema, depois enxerga que existe saída, depois quer a saída. */
+    if(c.dor && c.sol){
+      corpo += '<div class="ds"><div class="dor"><i>a dor</i><p>'+txt(c.dor)+'</p></div>'+
+               '<div class="sol"><i>a virada</i><p>'+txt(c.sol)+'</p></div></div>';
+    }
+
+    var pal=document.getElementById('palco');
+    pal.className='card '+cls; pal.innerHTML=corpo;
+
+    [].forEach.call(document.querySelectorAll('#caps button'),function(b){
+      var n=Number(b.dataset.i);
+      b.className = (C[n].c===c.c)?'on':(n<i?'feito':'');
+    });
+    document.getElementById('onde').textContent=(i+1)+' de '+C.length+' · '+c.c;
+    document.getElementById('ant').style.visibility=i?'visible':'hidden';
+    document.getElementById('prox').textContent=i===C.length-1?'Terminar':'Próximo →';
+    var nt=document.getElementById('nota');
+    nt.textContent=c.nota||''; nt.classList.remove('on');
+    document.getElementById('ajuda').style.visibility=c.nota?'visible':'hidden';
+    ligar(c);
+  }
+
+  document.getElementById('ant').onclick=function(){ ir(i-1); };
+  document.getElementById('prox').onclick=function(){
+    if(i<C.length-1) ir(i+1); else location.href='painel.html'; };
+  document.getElementById('ajuda').onclick=function(){
+    document.getElementById('nota').classList.toggle('on'); };
+
+  function ligar(c){
+    var e=document.getElementById('campo');
+    if(e){
+      var k = c.t==='reg' ? 'valor' : c.k;
+      if(R[k]!==undefined&&R[k]!=='') e.value=R[k];
+      e.oninput=function(){ R[k]=e.value; guardar(); };
+      /* ⚠️ repintar dentro do próprio `change` estoura "node is no longer a
+         child": o campo ainda está saindo do foco quando o innerHTML troca. */
+      e.onchange=function(){ R[k]=e.value; guardar(); };
+    }
+    var a=document.getElementById('anota');
+    if(a){ if(R.notas) a.value=R.notas; a.oninput=function(){ R.notas=a.value; guardar(); }; }
+    var es=document.getElementById('escala');
+    if(es) es.onclick=function(ev){ var b=ev.target.closest('button'); if(!b) return;
+      R.temp=b.dataset.t; guardar(); ir(i); };
+    var ch=document.getElementById('chips');
+    if(ch) ch.onclick=function(ev){ var b=ev.target.closest('button'); if(!b) return;
+      R.obj=b.dataset.o; guardar(); ir(i); };
+    var ar=document.getElementById('armar'); if(ar) ar.onclick=armar;
+    var cp=document.getElementById('copiar');
+    if(cp) cp.onclick=function(){ var m=document.getElementById('msg'); m.select();
+      navigator.clipboard.writeText(m.value).then(function(){
+        var o=document.getElementById('ok-msg'); o.classList.add('on');
+        setTimeout(function(){ o.classList.remove('on'); },1400); }).catch(function(){}); };
+    var md=document.getElementById('mandar');
+    if(md) md.onclick=function(){
+      var d=ATUAL?soD(ATUAL.telefone):''; if(d.length===10||d.length===11) d='55'+d;
+      window.open('https://wa.me/'+d+'?text='+
+        encodeURIComponent(document.getElementById('msg').value),'_blank'); };
+    var fe=document.getElementById('fecho');
+    if(fe){
+      if(R.estado) [].forEach.call(fe.querySelectorAll('button'),function(x){
+        x.classList.toggle('on', x.dataset.e===R.estado); });
+      fe.onclick=function(ev){ var b=ev.target.closest('button'); if(!b) return;
+        R.estado=b.dataset.e; guardar();
+        [].forEach.call(fe.querySelectorAll('button'),function(x){
+          x.classList.toggle('on', x===b); }); };
+    }
+    var rg=document.getElementById('registrar'); if(rg) rg.onclick=registrar;
+  }
+
+  function registrar(){
+    var av=document.getElementById('ok2');
+    if(!ATUAL){ av.textContent='escolha a lead'; av.style.color='#B0125B';
+      av.classList.add('on'); return; }
+    var nota=[R.equipe?('equipe: '+R.equipe):'',
+              R.quimicas?('químicas/semana: '+R.quimicas):'',
+              R.perda?('perda: '+R.perda):'',
+              R.faturamento?('faturamento: '+R.faturamento):'',
+              R.temp!==undefined?('temperatura: '+R.temp+'/10'):'',
+              R.prazo?('condição venceu '+horaBR(R.prazo)):'',
+              R.notas||''].filter(Boolean).join(' · ');
+    fetch(API,{method:'POST',headers:{'content-type':'application/json','x-senha':SENHA},
+      body:JSON.stringify({id:ATUAL.id,estado:R.estado||'conversa',
+                           valor:num(R.valor)||0,nota:nota})})
+      .then(function(r){ if(!r.ok) throw 0;
+        av.textContent='salvo ✓'; av.style.color=''; av.classList.add('on'); })
+      /* ⚠️ nunca fingir que salvou: ela acabou de fechar uma venda */
+      .catch(function(){ av.textContent='não salvou — tenta de novo';
+        av.style.color='#B0125B'; av.classList.add('on'); });
+  }
+
+  document.addEventListener('keydown',function(ev){
+    if(/input|textarea|select/i.test(ev.target.tagName||'')) return;
+    if(ev.key==='ArrowRight'||ev.key===' ') ir(i+1);
+    if(ev.key==='ArrowLeft') ir(i-1);
+  });
+})();
+</script>
+</body></html>

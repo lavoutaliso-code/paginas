@@ -1,0 +1,112 @@
+<!doctype html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Medidas da landing · Lalá</title>
+<style>
+  :root{--fundo:#F2F2F5;--papel:#fff;--tinta:#1C1C1E;--tinta2:#656C79;--fio:#E4E4E6;
+        --pink:#FF2D87;--pink-esc:#C4005E;--verde:#15614B}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--fundo);color:var(--tinta);font:16px/1.5 -apple-system,"SF Pro Text",system-ui,sans-serif;
+       -webkit-font-smoothing:antialiased;padding:22px 16px 70px}
+  .col{max-width:470px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+  h1{font-size:23px;letter-spacing:-.03em}
+  .sub{color:var(--tinta2);font-size:13px}
+  .cartao{background:var(--papel);border:1px solid var(--fio);border-radius:20px;padding:16px 18px;
+          box-shadow:0 1px 2px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:10px}
+  .rot{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta2)}
+  .big{font-size:40px;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+  .big.rosa{color:var(--pink-esc)}
+  .lin{display:flex;justify-content:space-between;gap:12px;font-size:14px;
+       border-bottom:1px solid var(--fio);padding-bottom:7px}
+  .lin:last-child{border-bottom:0;padding-bottom:0}
+  .lin b{font-variant-numeric:tabular-nums}
+  .barra{height:7px;border-radius:4px;background:#EDEDF0;overflow:hidden}
+  .barra i{display:block;height:100%;background:var(--pink)}
+  input,button{font:inherit}
+  input{width:100%;padding:11px 13px;border:1px solid var(--fio);border-radius:12px;background:var(--papel)}
+  button{width:100%;padding:12px;border:0;border-radius:99px;background:var(--pink);color:#fff;font-weight:700;cursor:pointer}
+  .aviso{font-size:12px;color:var(--tinta2);line-height:1.45}
+  .mal{color:#A4182B}
+</style></head><body>
+<div class="col">
+  <div>
+    <h1>Medidas da landing</h1>
+    <div class="sub" id="janela">a partir de 13/10/2026 — antes disso não havia medidor</div>
+  </div>
+
+  <div class="cartao" id="porta">
+    <div class="rot">chave</div>
+    <input id="k" type="password" placeholder="chave de leitura" autocomplete="off">
+    <button id="entrar">Ver as medidas</button>
+    <div class="aviso mal" id="erro" hidden>chave errada</div>
+  </div>
+
+  <div id="corpo" hidden></div>
+</div>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var corpo=$('#corpo'), porta=$('#porta');
+
+  function cartao(titulo, dentro){
+    return '<div class="cartao"><div class="rot">'+titulo+'</div>'+dentro+'</div>';
+  }
+  function linhas(obj, total){
+    var e=Object.entries(obj||{});
+    if(!e.length) return '<div class="aviso">nada ainda</div>';
+    return e.map(function(p){
+      var pct = total ? Math.round(100*p[1]/total) : 0;
+      return '<div class="lin"><span>'+p[0]+'</span><b>'+p[1]+(total?' · '+pct+'%':'')+'</b></div>';
+    }).join('');
+  }
+  function funil(m, total){
+    var ordem=[['r25','rolou 25%'],['r50','rolou 50%'],['r75','rolou 75%'],
+               ['preco','CHEGOU AO PREÇO'],['lancamento','viu a oferta'],['r90','rolou 90%'],['faq','chegou ao FAQ']];
+    return ordem.map(function(o){
+      var n=m[o[0]]||0, pct= total? Math.round(100*n/total):0;
+      return '<div><div class="lin"><span>'+o[1]+'</span><b>'+n+' · '+pct+'%</b></div>'+
+             '<div class="barra"><i style="width:'+pct+'%"></i></div></div>';
+    }).join('');
+  }
+
+  function pinta(d){
+    var v=d.visitas, c=d.cliques||{}, soma=0;
+    for(var k in c) soma+=c[k];
+    corpo.innerHTML =
+      cartao('visitas · últimos '+d.janelaDias+' dias',
+        '<div class="big">'+v+'</div><div class="aviso">desde '+d.desde+' · '+d.retornos+' já tinham vindo antes</div>') +
+      cartao('clicou em comprar',
+        '<div class="big rosa">'+(d.visitasComClique||0)+'</div>'+
+        '<div class="aviso">'+(d.cliquePorVisitaPct==null?'—':d.cliquePorVisitaPct+'% de quem abriu')+
+        ' · <b>clique não é venda</b>: a venda se confere no quadro da implantação</div>'+
+        linhas(c, soma)) +
+      cartao('até onde rolaram', funil(d.chegouAoMarco||{}, v)+
+        '<div class="aviso">rolagem mediana: <b>'+d.rolagemMediana+'%</b> · tempo mediano: <b>'+d.segundosMediana+'s</b></div>') +
+      cartao('de onde vieram', linhas(d.porOrigem, v)) +
+      cartao('em que aparelho', linhas(d.porAparelho, v)) +
+      cartao('dentro de aplicativo', linhas(d.dentroDeApp, v)) +
+      cartao('tempo por seção (mediana de quem passou)',
+        Object.entries(d.tempoSecao||{}).map(function(p){
+          return '<div class="lin"><span>'+p[0]+'</span><b>'+p[1].segundosMediana+'s · '+p[1].pessoas+' pessoas</b></div>';
+        }).join('') || '<div class="aviso">nada ainda</div>') +
+      cartao('por dia', linhas(d.porDia, 0));
+    corpo.hidden=false; porta.hidden=true;
+  }
+
+  function busca(k){
+    fetch('/api/medir?k='+encodeURIComponent(k)+'&dias=30',{cache:'no-store'})
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(d){ try{sessionStorage.setItem('lala_k',k)}catch(e){} pinta(d); })
+      .catch(function(){ $('#erro').hidden=false; });
+  }
+
+  $('#entrar').addEventListener('click',function(){ busca($('#k').value.trim()); });
+  $('#k').addEventListener('keydown',function(e){ if(e.key==='Enter') busca(this.value.trim()); });
+  var salva=null; try{ salva=sessionStorage.getItem('lala_k'); }catch(e){}
+  var naUrl=new URLSearchParams(location.search).get('k');
+  if(naUrl||salva) busca(naUrl||salva);
+})();
+</script>
+</body></html>

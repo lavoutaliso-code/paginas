@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>lailasalon — anamnese, sistemas e consultoria para salão</title>
+<meta name="description" content="Anamnese inteligente, sistemas para o salão e consultoria 1 a 1. Deixe seu nome e telefone: uma consultora liga e marca uma reunião gratuita.">
+<meta name="theme-color" content="#FBF8F6">
+<link rel="icon" href="img/logo-selo.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="lailasalon — reunião gratuita">
+<meta property="og:description" content="Anamnese inteligente, sistemas para o salão e consultoria 1 a 1.">
+<style>
+:root{color-scheme:light;--rosa:#D1016B;--rosa-escuro:#8E0049;--tinta:#17171A;--apoio:#6E6E73;--azul:#0B2536;--papel:#FBF8F6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel);color:var(--tinta);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh;display:flex;justify-content:center;
+  padding:calc(16px + env(safe-area-inset-top)) 18px calc(16px + env(safe-area-inset-bottom))}
+.tela{width:100%;max-width:400px;margin:auto 0;display:flex;flex-direction:column;align-items:center;gap:14px}
+.marca{height:15px;width:auto}
+h1{font-size:23px;font-weight:600;letter-spacing:-.03em;line-height:1.15;margin:0;text-align:center;text-wrap:balance}
+h1 b{color:var(--rosa);font-weight:600}
+.sub{font-size:12.5px;line-height:1.45;color:var(--apoio);margin:0;text-align:center;max-width:30ch}
+
+/* palco com os dois aparelhos */
+.palco{position:relative;width:100%;height:188px;display:flex;align-items:center;justify-content:center}
+.tablet{position:absolute;left:50%;transform:translateX(-118px) rotate(-4deg);width:118px;
+  border:5px solid #1A1A1D;border-radius:16px;overflow:hidden;background:#1A1A1D;
+  box-shadow:0 12px 26px rgba(11,37,54,.28)}
+.tablet img{display:block;width:100%}
+.note{position:absolute;left:50%;transform:translateX(-24px) rotate(2deg);width:206px;filter:drop-shadow(0 12px 22px rgba(142,0,73,.26))}
+.note .vidro{border:6px solid #202024;border-bottom:0;border-radius:11px 11px 0 0;
+  background:linear-gradient(150deg,#E8317F,var(--rosa) 52%,var(--rosa-escuro));
+  aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+.note .logo{width:96px;height:auto}
+.note .frase{font-size:8.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.92)}
+.note .base{height:8px;background:linear-gradient(#303036,#17171A);border-radius:0 0 4px 4px;
+  clip-path:polygon(1.5% 0,98.5% 0,100% 100%,0 100%);margin:0 -9px}
+
+.trio{display:flex;align-items:center;justify-content:center;margin:0}
+.trio span{font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#6E6E73;
+  padding:0 13px;border-left:1px solid rgba(23,23,15,.16);line-height:1}
+.trio span:first-child{border-left:0}
+
+form{width:100%;display:flex;flex-direction:column;gap:8px;margin-top:2px}
+input[type=text],input[type=tel]{width:100%;height:46px;border-radius:13px;border:0;background:#fff;
+  box-shadow:inset 0 0 0 1px rgba(23,23,15,.13);padding:0 15px;font-size:16px;font-family:inherit;color:var(--tinta)}
+input::placeholder{color:#A8A49E}
+input:focus{outline:none;box-shadow:inset 0 0 0 2px var(--rosa)}
+button{height:50px;border:0;border-radius:14px;background:var(--rosa);color:#fff;font-size:16px;font-weight:600;
+  font-family:inherit;letter-spacing:-.01em;cursor:pointer;transition:filter .2s ease,transform .15s ease}
+button:hover{filter:brightness(1.07)} button:active{transform:scale(.99)}
+.pe{font-size:11px;color:var(--apoio);text-align:center;margin:0}
+.hp{position:absolute;left:-9999px}
+.erro{font-size:11.5px;color:#B0125B;text-align:center;margin:0;min-height:0}
+button[disabled]{opacity:.65;cursor:default}
+.pronto{display:none;flex-direction:column;align-items:center;gap:9px;text-align:center;width:100%}
+.pronto.on{display:flex}
+.pronto .tique{width:48px;height:48px;border-radius:50%;background:var(--rosa);display:flex;align-items:center;justify-content:center}
+.pronto h2{font-size:20px;font-weight:600;letter-spacing:-.02em;margin:0}
+.pronto p{font-size:13px;line-height:1.5;color:var(--apoio);margin:0;max-width:30ch}
+.sumiu{display:none !important}
+</style>
+<!-- ⭐ O MEDIDOR DO FUNIL (22/10). ESTA PÁGINA ATENDE A DOIS FUNIS ao mesmo
+     tempo — a palavra «gestor» e a palavra «time» caem as duas aqui. Por isso
+     ela NÃO PODE declarar `data-funil`: a declaração fixa UMA etiqueta e a
+     outra palavra perderia a venda inteira para o balde errado.
+     Sem declaração, o rastro.js lê o `utm_campaign` da URL e conta o evento
+     `chegou` com a etiqueta que trouxe a pessoa — «gestor» ou «time», cada
+     uma no seu funil. Ele também preenche os campos ocultos deste formulário,
+     então o lead chega sabendo de qual palavra veio. -->
+<script src="https://lala-landing.netlify.app/rastro.js" defer></script>
+</head>
+<body>
+  <main class="tela">
+    <img class="marca" src="img/logo-selo.png" alt="lailasalon">
+    <h1>A anamnese, o sistema e a <b>consultoria</b> do seu salão</h1>
+    <p class="sub">Uma consultora liga, entende o seu salão e mostra o que faz sentido pra você.</p>
+
+    <div class="palco">
+      <div class="tablet"><img src="img/anamnese-tela.jpg" alt="Anamnese inteligente"></div>
+      <div class="note">
+        <div class="vidro">
+          <img class="logo" src="img/logo-selo-branca.png" alt="lailasalon">
+          <span class="frase">sistemas para salão</span>
+        </div>
+        <div class="base"></div>
+      </div>
+    </div>
+
+    <div class="trio"><span>Anamnese</span><span>Sistemas</span><span>Consultoria</span></div>
+
+    <form name="consultora" method="POST" data-netlify="true" netlify-honeypot="empresa">
+      <input type="hidden" name="form-name" value="consultora">
+      <input type="hidden" name="quando" value="">
+      <p class="hp"><label>não preencha <input name="empresa"></label></p>
+      <input type="text" name="nome" placeholder="Seu nome" autocomplete="name" required>
+      <input type="tel" name="telefone" placeholder="Seu WhatsApp com DDD" autocomplete="tel" inputmode="numeric" required>
+      <button type="submit" id="bt">Quero a reunião gratuita</button>
+      <p class="erro" id="erro"></p>
+    </form>
+
+    <div class="pronto" id="pronto">
+      <span class="tique"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <h2 id="oi">Recebemos seu contato</h2>
+      <p>Uma consultora vai te ligar. Se preferir, deixa o WhatsApp aberto — às vezes a gente chama por lá primeiro.</p>
+    </div>
+    <p class="pe">Reunião sem custo e sem compromisso.</p>
+  </main>
+<script>
+(function(){
+  var f=document.querySelector('form'), bt=document.getElementById('bt'), erro=document.getElementById('erro');
+  var nome=f.nome, tel=f.telefone;
+
+  /* o telefone é o que faz a consultora conseguir ligar: confere antes de mandar */
+  function digitos(){ return (tel.value.match(/\d/g)||[]).join(''); }
+  function vale(){
+    erro.textContent='';
+    if(nome.value.trim().length<2){ erro.textContent='como podemos te chamar?'; nome.focus(); return false; }
+    var d=digitos();
+    if(d.length<10){ erro.textContent='faltou o DDD ou um número'; tel.focus(); return false; }
+    if(d.length===11 && d.charAt(2)!=='9'){ erro.textContent='confere o número, parece faltar um dígito'; tel.focus(); return false; }
+    return true;
+  }
+
+  f.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if(!vale()) return;
+    bt.disabled=true; bt.textContent='Enviando…';
+    var d=new URLSearchParams();
+    d.append('form-name','consultora');
+    d.append('nome', nome.value.trim());
+    d.append('telefone', tel.value.trim());
+    d.append('quando', new Date().toLocaleString('pt-BR'));
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:d.toString()})
+      .then(function(r){ fim(r.ok); }).catch(function(){ fim(false); });
+  });
+
+  function fim(enviou){
+    if(!enviou){
+      /* nunca perde o contato em silêncio */
+      bt.disabled=false; bt.textContent='Tentar de novo';
+      erro.textContent='não consegui enviar agora — tenta de novo em alguns segundos';
+      return;
+    }
+    var primeiro=nome.value.trim().split(/\s+/)[0];
+    document.getElementById('oi').textContent=primeiro+', recebemos seu contato';
+    f.classList.add('sumiu');
+    document.querySelector('.trio').classList.add('sumiu');
+    document.querySelector('.pe').classList.add('sumiu');
+    document.getElementById('pronto').classList.add('on');
+  }
+})();
+</script>
+</body></html>
