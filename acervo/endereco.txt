@@ -1,1 +1,1 @@
-https://john-dividend-prefers-peripherals.trycloudflare.com
+https://api.trycloudflare.com
