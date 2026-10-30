@@ -1,1 +1,1 @@
-https://benjamin-appears-indicating-climate.trycloudflare.com
+https://api.trycloudflare.com
