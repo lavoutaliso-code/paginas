@@ -1,1 +1,1 @@
-https://remote-alan-soundtrack-adoption.trycloudflare.com
+https://api.trycloudflare.com
