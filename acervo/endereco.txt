@@ -1,1 +1,1 @@
-https://soup-wood-builder-try.trycloudflare.com
+https://api.trycloudflare.com
