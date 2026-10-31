@@ -1,1 +1,1 @@
-https://meetings-scanning-costa-oriental.trycloudflare.com
+https://api.trycloudflare.com
