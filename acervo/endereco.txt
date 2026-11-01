@@ -1,1 +1,1 @@
-https://sections-trails-larry-transition.trycloudflare.com
+https://api.trycloudflare.com
