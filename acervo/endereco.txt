@@ -1,1 +1,1 @@
-https://fleece-nature-recordings-mitchell.trycloudflare.com
+https://api.trycloudflare.com
