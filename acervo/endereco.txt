@@ -1,1 +1,1 @@
-https://surveys-regards-stephanie-yukon.trycloudflare.com
+https://api.trycloudflare.com
