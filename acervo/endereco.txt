@@ -1,1 +1,1 @@
-https://ceiling-lasting-subscribers-trio.trycloudflare.com
+https://api.trycloudflare.com
