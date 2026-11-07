@@ -1,1 +1,1 @@
-https://api.trycloudflare.com
+https://fewer-jackson-phases-wan.trycloudflare.com
