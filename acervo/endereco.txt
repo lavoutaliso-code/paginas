@@ -1,1 +1,1 @@
-https://scholarship-consultant-filter-request.trycloudflare.com
+https://api.trycloudflare.com
