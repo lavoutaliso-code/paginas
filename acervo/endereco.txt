@@ -1,1 +1,1 @@
-https://arrived-guests-clark-assessments.trycloudflare.com
+https://api.trycloudflare.com
