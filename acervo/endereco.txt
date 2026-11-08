@@ -1,1 +1,1 @@
-https://herald-forty-celebrity-plastics.trycloudflare.com
+https://api.trycloudflare.com
