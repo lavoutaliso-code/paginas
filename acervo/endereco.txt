@@ -1,1 +1,1 @@
-https://api.trycloudflare.com
+https://advisor-bar-lbs-issued.trycloudflare.com
