@@ -1,1 +1,1 @@
-https://cheese-calcium-activation-pull.trycloudflare.com
+https://api.trycloudflare.com
