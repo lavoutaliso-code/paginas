@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Acervo · Izabela Laila</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%}
+  body{min-height:100svh;display:flex;align-items:center;justify-content:center;
+       padding:28px 22px;background:#0b0f14;color:#eaf6fa;
+       font:400 17px/1.45 -apple-system,system-ui,sans-serif}
+  .cartao{width:100%;max-width:420px;text-align:center}
+  .selo{width:84px;height:84px;margin:0 auto 22px;border-radius:24px;
+        background:linear-gradient(160deg,#30D8FC,#1b8fb5);
+        display:flex;align-items:center;justify-content:center;font-size:40px;
+        box-shadow:0 14px 40px rgba(48,216,252,.28)}
+  h1{font-size:25px;line-height:1.2;font-weight:700;letter-spacing:-.4px}
+  .sub{margin-top:12px;color:#8fa6b2;font-size:16px}
+  a.btn,button.btn{display:block;width:100%;margin-top:26px;padding:17px 20px;
+        border:0;border-radius:16px;background:#30D8FC;color:#04222b;
+        font:700 18px/1 -apple-system,system-ui,sans-serif;text-decoration:none;
+        -webkit-appearance:none}
+  a.btn:active,button.btn:active{opacity:.75}
+  .passos{margin-top:30px;text-align:left;color:#9fb4c0;font-size:15px}
+  .passos li{margin:10px 0 0 20px}
+  .aviso{margin-top:26px;padding:14px 16px;border-radius:14px;
+         background:#2a1517;color:#ffb3b8;font-size:15px;text-align:left;display:none}
+  .carregando{margin-top:26px;color:#5e7585;font-size:15px}
+</style>
+</head>
+<body>
+<div class="cartao">
+  <div class="selo">📹</div>
+  <h1>Seu Acervo</h1>
+  <p class="sub">Favorite no rolo o que valer a pena.<br>Um toque aqui manda tudo pro seu acervo.</p>
+
+  <p class="carregando" id="carregando">procurando o acervo…</p>
+  <a class="btn" id="instalar" href="#" style="display:none">Instalar o atalho</a>
+
+  <div class="aviso" id="aviso">
+    O acervo está fora do ar neste momento — o computador que recebe os vídeos
+    está desligado. Ligue o Mac e abra este link de novo depois.
+  </div>
+
+  <ol class="passos">
+    <li>Toque em <b>Instalar o atalho</b> e confirme <b>Adicionar atalho</b>.</li>
+    <li>Na primeira vez ele pede acesso às <b>Fotos</b> — toque em <b>Permitir</b>.</li>
+    <li>No fim do dia, abra o app <b>Atalhos</b> e toque em <b>Mandar pro Acervo</b>.</li>
+  </ol>
+</div>
+<script>
+(async () => {
+  const carregando = document.getElementById('carregando');
+  const botao = document.getElementById('instalar');
+  const aviso = document.getElementById('aviso');
+  try {
+    const r = await fetch('endereco.txt?' + Date.now(), {cache: 'no-store'});
+    if (!r.ok) throw new Error(r.status);
+    const porta = (await r.text()).trim().replace(/\/+$/, '');
+    if (!/^https:\/\//.test(porta)) throw new Error('endereço inválido');
+    // confere se o Mac está de pé antes de oferecer o botão.
+    // no-cors: a resposta vem opaca (o recebedor não manda cabeçalho de CORS),
+    // mas ela SÓ chega se a porta estiver mesmo respondendo — é o que importa.
+    await fetch(porta + '/vivo', {mode: 'no-cors', cache: 'no-store'});
+    botao.href = porta + '/atalho?de=iza';
+    botao.style.display = 'block';
+    carregando.style.display = 'none';
+  } catch (e) {
+    carregando.style.display = 'none';
+    aviso.style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>
