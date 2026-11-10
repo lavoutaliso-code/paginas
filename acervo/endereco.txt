@@ -1,1 +1,1 @@
-https://guestbook-configurations-guam-donate.trycloudflare.com
+https://api.trycloudflare.com
