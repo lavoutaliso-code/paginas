@@ -1,1 +1,1 @@
-https://api.trycloudflare.com
+https://dpi-pad-destiny-turns.trycloudflare.com
