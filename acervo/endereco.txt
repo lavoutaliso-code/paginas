@@ -1,1 +1,1 @@
-https://mutual-breath-horses-peripherals.trycloudflare.com
+https://api.trycloudflare.com
