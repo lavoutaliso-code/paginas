@@ -1,1 +1,1 @@
-https://flexibility-receipt-insert-bradford.trycloudflare.com
+https://api.trycloudflare.com
