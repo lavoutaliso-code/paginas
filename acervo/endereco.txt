@@ -1,1 +1,1 @@
-https://launch-enterprises-wood-kansas.trycloudflare.com
+https://api.trycloudflare.com
