@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Os 5 motores de aquisição de clientes — aula 07</title>
+<link rel="stylesheet" href="fontes.css">
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   AULA 07 · OS 5 CANAIS DE AQUISIÇÃO — módulo de marketing, aula 1
+   A aula inteira é UMA cena que cresce. O slide seguinte nunca apaga o
+   anterior: acrescenta um balde virado, o nome da técnica e o cartão que
+   explica. No fim, o mapa completo da aquisição.
+   ⚠️ Os cartões moram nas BORDAS (2 à esquerda, 1 no topo, 2 à direita) e os
+      baldes no arco central — nenhum texto cruza o caminho da gente caindo.
+   ══════════════════════════════════════════════════════════════════════════ */
+:root{
+  --sf:-apple-system,'SF Pro Text',BlinkMacSystemFont,system-ui,sans-serif;
+  --sfd:-apple-system,'SF Pro Display',BlinkMacSystemFont,system-ui,sans-serif;
+  --papel:#FAF9F4; --tinta:#26251F; --t2:#6E6C63; --t3:#A3A098;
+  --obj:#A8A59B; --linha:#E6E4DB; --cartao:#FFFEFA;
+  --rosa:#FCB5D5; --vinho:#7A2846; --amarelo:#F3CE2E;
+  --verde:#3E6B3A; --vermelho:#B5452F;
+  --pad:clamp(26px,3.2vw,60px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sf);background:var(--papel);color:var(--tinta);
+  -webkit-font-smoothing:antialiased;letter-spacing:-.012em;cursor:pointer}
+body.desenho{cursor:crosshair}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.5;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.055'/></svg>")}
+h1,h2,h3{font-family:var(--sfd);font-weight:600;letter-spacing:-.034em;line-height:1.02}
+
+#palco{position:fixed;inset:0}
+.s{position:absolute;inset:0;display:none;flex-direction:column;
+  padding:clamp(18px,2.6vh,34px) var(--pad) clamp(30px,3.4vh,44px)}
+.s.ativo{display:flex;animation:ent .3s cubic-bezier(.22,1,.3,1)}
+@keyframes ent{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.mt{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'><path d='M1,4.5 C20,1.5 40,6 60,2.8 C78,0.6 92,5 99,2.6 L99,16.4 C80,19.2 60,14 40,18.2 C22,20 10,16 1,18.4 Z' fill='%23FCB5D5'/></svg>");
+  background-repeat:no-repeat;background-size:100% 100%;
+  padding:.04em .2em;margin:0 -.08em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+
+.kicker{font-size:clamp(9px,1.12vh,13px);font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--t3);flex:0 0 auto}
+.kicker b{color:var(--vinho);font-weight:700}
+.ht{font-size:clamp(21px,3.5vh,41px);max-width:52ch;margin-top:clamp(3px,.7vh,9px);flex:0 0 auto}
+.arte{flex:1 1 auto;min-height:0;margin-top:clamp(4px,.8vh,12px)}
+.arte svg{width:100%;height:100%;display:block}
+
+#rod{position:fixed;left:0;bottom:0;height:clamp(22px,3vh,36px);z-index:40;display:flex;
+  align-items:center;padding:0 var(--pad);font-size:clamp(9px,1.12vh,12px);color:var(--t3);
+  pointer-events:none}
+#pag{position:fixed;right:var(--pad);top:clamp(18px,2.6vh,34px);z-index:42;display:flex;
+  align-items:center;gap:clamp(8px,1vw,14px);font-size:clamp(10px,1.22vh,13px);color:var(--t3)}
+#pag .ct{pointer-events:none}
+#pag b{font-family:var(--sfd);font-weight:700;color:var(--tinta);font-size:1.25em}
+#inicio{border:1px solid var(--linha);background:var(--cartao);color:var(--t2);cursor:pointer;
+  font-family:var(--sf);font-size:clamp(10px,1.2vh,12px);font-weight:600;border-radius:999px;
+  padding:5px 13px;opacity:0;transition:background .16s,color .16s,opacity .2s}
+#inicio:hover{background:var(--tinta);color:var(--papel);border-color:var(--tinta)}
+#inicio.ver{opacity:1}
+#barra{position:fixed;left:0;top:0;height:3px;background:var(--vinho);width:0;z-index:41;
+  transition:width .3s cubic-bezier(.22,1,.3,1)}
+
+/* ===== caneta ===== */
+#tela{position:fixed;inset:0;z-index:45;pointer-events:none}
+body.desenho #tela{pointer-events:auto;cursor:crosshair}
+#caixa{position:fixed;right:clamp(10px,1.2vw,20px);bottom:clamp(6px,.8vh,11px);z-index:50;
+  display:flex;align-items:center;gap:6px;background:var(--cartao);border:1px solid var(--linha);
+  border-radius:999px;padding:5px;box-shadow:0 1px 2px rgba(38,37,31,.05),0 14px 26px -20px rgba(38,37,31,.5)}
+#caixa button{width:28px;height:28px;border-radius:999px;border:2px solid transparent;background:none;
+  cursor:pointer;display:grid;place-items:center;font-family:var(--sf);font-size:12px;font-weight:700;
+  color:var(--t2);padding:0}
+#caixa button .bolha{width:16px;height:16px;border-radius:999px;display:block}
+#caixa button.sel{border-color:var(--tinta)}
+#caixa button:hover{background:#F2EFE5}
+#caixa .div{width:1px;height:18px;background:var(--linha)}
+#caixa .lig{width:auto;padding:0 12px;font-size:11px;font-weight:600}
+#caixa .lig.on{background:var(--tinta);color:var(--papel)}
+</style></head><body>
+
+<div id="barra"></div>
+<div id="palco">
+
+<!-- ========== 1 · O CENÁRIO: dois salões, a mesma cidade ========== -->
+<section class="s" id="s1">
+  <div class="kicker"><b>o cenário</b> · dois salões, a mesma cidade, o mesmo preço</div>
+  <h1 class="ht">Um tem <span class="mt">um balde</span>. O outro tem cinco.</h1>
+  <div class="arte" id="arte1"></div>
+</section>
+
+<!-- ========== 2 a 6 · a cena cresce, um balde por clique ========== -->
+<section class="s"><div class="kicker"><b>técnica 1 de 5</b> · GEO / AEO · answer engine optimization</div>
+  <h1 class="ht">A IA recomenda <span class="mt">quem ela consegue ler</span>.</h1>
+  <div class="arte" id="arte2"></div></section>
+
+<section class="s"><div class="kicker"><b>técnica 2 de 5</b> · mídia paga · paid media + creative testing</div>
+  <h1 class="ht">O único balde que você <span class="mt">liga hoje e mede amanhã</span>.</h1>
+  <div class="arte" id="arte3"></div></section>
+
+<section class="s"><div class="kicker"><b>técnica 3 de 5</b> · creators · creator performance e UGC</div>
+  <h1 class="ht">A confiança que <span class="mt">você não precisa construir sozinha</span>.</h1>
+  <div class="arte" id="arte4"></div></section>
+
+<section class="s"><div class="kicker"><b>técnica 4 de 5</b> · conteúdo · social discovery</div>
+  <h1 class="ht">Alcance <span class="mt">sem pagar por ele</span> — para quem ainda não te segue.</h1>
+  <div class="arte" id="arte5"></div></section>
+
+<section class="s"><div class="kicker"><b>técnica 5 de 5</b> · retargeting + lifecycle</div>
+  <h1 class="ht">O balde mais barato é <span class="mt">quem já te viu</span>.</h1>
+  <div class="arte" id="arte6"></div></section>
+
+<!-- ========== 7 · o mapa inteiro ========== -->
+<section class="s"><div class="kicker"><b>o mapa da aquisição</b> · as cinco fontes e o mesmo destino</div>
+  <h1 class="ht">Cinco baldes. Um funil. <span class="mt">Uma cadeira ocupada</span>.</h1>
+  <div class="arte" id="arte7"></div></section>
+
+<!-- ========== 8 · o diagnóstico ========== -->
+<section class="s"><div class="kicker"><b>o diagnóstico</b> · agora olhe para a sua empresa</div>
+  <h1 class="ht">Quantos baldes estão virados <span class="mt">na sua?</span></h1>
+  <div class="arte" id="arte8"></div></section>
+
+</div>
+
+<canvas id="tela"></canvas>
+
+<div id="caixa">
+  <button class="lig" id="bLig" title="ligar e desligar o desenho (tecla D)">desenhar</button>
+  <span class="div"></span>
+  <button data-cor="#7A2846" class="sel" title="caneta vinho (1)"><span class="bolha" style="background:#7A2846"></span></button>
+  <button data-cor="#1D1D1D" title="caneta preta (2)"><span class="bolha" style="background:#1D1D1D"></span></button>
+  <button data-cor="#F3CE2E" data-grosso="1" title="marca-texto (3)"><span class="bolha" style="background:#F3CE2E"></span></button>
+  <span class="div"></span>
+  <button id="bApaga" title="apagar este slide (tecla E)">↺</button>
+</div>
+
+<div id="rod"><span id="rodE"></span></div>
+<div id="pag"><button id="inicio" title="voltar para o começo (tecla Home)">↖ início</button><span class="ct" id="ct"></span></div>
+
+<script>
+/* ===================== paleta ===================== */
+const C = {obj:'#A8A59B', fd:'#F4F2E9', cartao:'#FFFEFA', rosa:'#FCB5D5', rosac:'#FFF0F6',
+  vinho:'#7A2846', tinta:'#26251F', t2:'#6E6C63', t3:'#A3A098', linha:'#E6E4DB',
+  verde:'#3E6B3A', vermelho:'#B5452F'};
+const SFD = "-apple-system,'SF Pro Display',sans-serif";
+const T = (x,y,s,o={}) => `<text x="${x}" y="${y}" text-anchor="${o.a||'middle'}"
+  font-family="${SFD}" font-size="${o.fs||16}" font-weight="${o.fw||600}"
+  fill="${o.c||C.t2}" ${o.ls?`letter-spacing="${o.ls}"`:''} ${o.op?`opacity="${o.op}"`:''}>${s}</text>`;
+const seta = (x1,y1,x2,y2,cor,w=4) => {
+  const a = Math.atan2(y2-y1,x2-x1), L=w*2.8;
+  return `<g><path d="M${x1} ${y1} L${x2} ${y2}" stroke="${cor}" stroke-width="${w}"
+    stroke-linecap="round" fill="none"/>
+    <path d="M${x2} ${y2} L${x2-Math.cos(a-.5)*L} ${y2-Math.sin(a-.5)*L}
+             M${x2} ${y2} L${x2-Math.cos(a+.5)*L} ${y2-Math.sin(a+.5)*L}"
+      stroke="${cor}" stroke-width="${w}" stroke-linecap="round" fill="none"/></g>`;
+};
+/* ruído determinístico: o desenho tem que sair igual todo dia */
+const rnd = i => { const v = Math.sin(i*12.9898)*43758.5453; return v - Math.floor(v); };
+
+/* ===================== as peças ===================== */
+const gente = (x,y,s=1,rot=0,cor=C.obj,fill=C.fd,op=1) => `<g transform="translate(${x} ${y})
+  rotate(${rot}) scale(${s})" opacity="${op}">
+  <circle cx="0" cy="-11" r="6.6" fill="${fill}" stroke="${cor}" stroke-width="3.2"/>
+  <path d="M-10.5 10 a10.5 11 0 0 1 21 0 z" fill="${fill}" stroke="${cor}" stroke-width="3.2"
+    stroke-linejoin="round"/></g>`;
+
+const balde = (x,y,rot,escala=1,op=1) => `<g transform="translate(${x} ${y})
+  rotate(${rot}) scale(${escala})" opacity="${op}">
+  <path d="M-45 -34 Q 0 -96 45 -34" fill="none" stroke="${C.obj}" stroke-width="4.6"
+    stroke-linecap="round"/>
+  <path d="M-46 -34 L46 -34 L31 40 a9 9 0 0 1 -9 7 H-22 a9 9 0 0 1 -9 -7 Z"
+    fill="${C.fd}" stroke="${C.obj}" stroke-width="5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-34" rx="46" ry="11" fill="${C.cartao}" stroke="${C.obj}" stroke-width="5"/>
+  <path d="M-38 -6 L35 -6" stroke="${C.obj}" stroke-width="3.4" stroke-linecap="round" opacity=".4"/>
+</g>`;
+
+/* o funil, parametrizado: serve ao grande do mapa e aos dois pequenos do cenário */
+function funil(cx,bocaY,meiaL,gargY,gargM,tubo){
+  return `<path d="M${cx-meiaL} ${bocaY} H${cx+meiaL} L${cx+gargM} ${gargY} v${tubo}
+    h${-gargM*2} v${-tubo} z" fill="${C.fd}" stroke="${C.obj}" stroke-width="5.4"
+    stroke-linejoin="round"/>
+  <ellipse cx="${cx}" cy="${bocaY}" rx="${meiaL}" ry="${meiaL*0.078}" fill="${C.cartao}"
+    stroke="${C.obj}" stroke-width="5.4"/>`;
+}
+
+/* a gente que já está dentro — distribuída pela própria geometria do funil */
+function dentro(cx,bocaY,meiaL,gargY,gargM,k,esc=1){
+  const LINHAS = [[4,.10],[3,.26],[3,.42],[2,.58],[1,.76]];
+  const todas = [];
+  LINHAS.forEach(([m,t],li)=>{
+    const y = bocaY + t*(gargY-bocaY);
+    const meia = (meiaL + t*(gargM-meiaL))*0.60;
+    for(let j=0;j<m;j++){
+      const px = m===1 ? cx : cx - meia + (2*meia)*(j/(m-1));
+      todas.push([px + (rnd(li*7+j)-0.5)*18*esc, y + (rnd(li*3+j+9)-0.5)*14*esc,
+                  (rnd(li+j*5)-0.5)*24]);
+    }
+  });
+  if(k<=0) return '';                       /* slice(-0) devolveria a lista inteira */
+  return todas.slice(-k).map(([x,y,r],i)=>gente(x,y,esc*(1-i*0.012),r)).join('');
+}
+
+/* o jorro: a fila de gente saindo da boca do balde e caindo no funil */
+function jorro(x1,y1,x2,y2,n,esc=1){
+  const giros=[-16,8,-6,15,-10], desvio=[0,14,-12,9,-7];
+  let s='';
+  for(let i=0;i<n;i++){
+    const t = 0.06 + 0.94*i/(n-1);
+    const cx = x1 + (x2-x1)*0.62, cy = y1 + (y2-y1)*0.12;
+    const px = (1-t)*(1-t)*x1 + 2*(1-t)*t*cx + t*t*x2 + desvio[i%5]*(1-t)*esc;
+    const py = (1-t)*(1-t)*y1 + 2*(1-t)*t*cy + t*t*y2;
+    s += gente(px,py,esc*(0.84+t*0.36),giros[i%5]);
+  }
+  return s;
+}
+
+/* ===================== as cinco técnicas ===================== */
+const MOTOR = [
+  {nome:'GEO / AEO',    tec:'answer engine optimization',
+   l1:'Aparecer na resposta quando ela pergunta à IA.',
+   l2:'Perfil completo, avaliação e conteúdo que a IA lê.'},
+  {nome:'MÍDIA PAGA',   tec:'paid media + creative testing',
+   l1:'Compra a atenção dela hoje — e desliga hoje.',
+   l2:'Testa 3 criativos; fica o de menor custo por cliente.'},
+  {nome:'CREATORS',     tec:'creator performance · UGC',
+   l1:'Outra pessoa fala por você — e ela acredita.',
+   l2:'A cliente filma, o creator posta, o vídeo vira anúncio.'},
+  {nome:'CONTEÚDO',     tec:'social discovery',
+   l1:'Reels, TikTok e Shorts entregam quem não te segue.',
+   l2:'Transformação e tendência: alcance que você não paga.'},
+  {nome:'RETARGETING',  tec:'retargeting + lifecycle',
+   l1:'Volta em quem já te viu e não marcou.',
+   l2:'E traz de volta quem sumiu: o balde mais barato.'}
+];
+
+/* ===================== o mapa (slides 2 a 8) =====================
+   Geometria fixa: o que muda entre um slide e o outro é só quantos
+   baldes já foram revelados. Nada se move, nada se apaga.            */
+const MAPA = {
+  W:1600, H:860, cx:800, bocaY:524, meiaL:272, gargY:716, gargM:46, tubo:48, esc:0.86,
+  /* os baldes no arco — 142 de distância: um balde inclinado ocupa ~110 */
+  B:[{x:516, y:372,rot: 40,alvo:598},
+     {x:658, y:300,rot: 26,alvo:700},
+     {x:800, y:274,rot: 10,alvo:802},
+     {x:942, y:300,rot:-26,alvo:904},
+     {x:1084,y:372,rot:-40,alvo:1006}],
+  /* os cartões nas bordas. As setas foram medidas contra o contorno real do
+     balde externo: a de cima passa ACIMA dele (y≈225 contra topo 289) e a de
+     baixo encosta pela esquerda (470,386 é o ponto mais externo do corpo). */
+  K:[{x:36,  y:500, ax:446, ay:548, bx:460, by:404},
+     {x:36,  y:150, ax:446, ay:200, bx:606, by:252},
+     {x:595, y:16,  ax:800, ay:126, bx:800, by:196},
+     {x:1164,y:150, ax:1154,ay:200, bx:994, by:252},
+     {x:1164,y:500, ax:1154,ay:548, bx:1140,by:404}]
+};
+const KW = 400, KH = 104;          /* o cartão de explicação */
+
+function cartao(k,m,i,marcar){
+  return `<g>
+    <rect x="${k.x}" y="${k.y}" width="${KW}" height="${KH}" rx="16" fill="${C.cartao}"
+      stroke="${C.linha}" stroke-width="2.6"/>
+    <circle cx="${k.x+32}" cy="${k.y+32}" r="15" fill="${C.rosac}" stroke="${C.vinho}"
+      stroke-width="2.4"/>
+    ${T(k.x+32,k.y+38,i+1,{fs:16,fw:700,c:C.vinho})}
+    ${T(k.x+58,k.y+30,m.nome,{a:'start',fs:21,fw:700,c:C.tinta,ls:'-.02em'})}
+    ${T(k.x+58,k.y+48,m.tec,{a:'start',fs:11.5,fw:600,c:C.t3,ls:'.08em'})}
+    ${T(k.x+22,k.y+72,m.l1,{a:'start',fs:15,fw:500,c:C.t2})}
+    ${T(k.x+22,k.y+91,m.l2,{a:'start',fs:15,fw:500,c:C.t2})}
+  </g>
+  ${seta(k.ax,k.ay,k.bx,k.by,'#C3BFB2',3.4)}`;
+}
+
+/* as vagas dentro do funil, da mais funda para a mais rasa:
+   é nessa ordem que a gente vai se acumulando até lotar */
+const VAGAS = (()=>{
+  const M=MAPA, L=[[6,.13],[5,.27],[4,.41],[3,.55],[2,.69],[1,.84]], v=[];
+  L.forEach(([m,t],li)=>{
+    const y = M.bocaY + t*(M.gargY-M.bocaY);
+    const meia = (M.meiaL + t*(M.gargM-M.meiaL))*0.60;
+    for(let j=0;j<m;j++){
+      const px = m===1 ? M.cx : M.cx - meia + (2*meia)*(j/(m-1));
+      v.push({x:px+(rnd(li*7+j)-.5)*16, y:y+(rnd(li*3+j+9)-.5)*12, r:(rnd(li+j*5)-.5)*22});
+    }
+  });
+  return v.reverse();
+})();
+const LOTADO = VAGAS.length;
+
+/* a leitura do exercício, por quantidade de baldes marcados */
+const LEITURA = ['nenhum balde virado — a agenda depende da sorte',
+  'um balde só — se ele secar, a cadeira esvazia',
+  'dois baldes — você já saiu da sorte',
+  'três baldes — a agenda tem lastro',
+  'quatro baldes — falta um para o mapa completo',
+  'os cinco virados — nenhuma semana depende de um canal só'];
+
+function mapa(n,opt={}){
+  const M = MAPA, marcar = !!opt.marcar;
+  const ativos = opt.ativos || [0,1,2,3,4].slice(0,n);
+  const cheias = opt.cheias || 0;
+  let s = `<svg viewBox="0 0 ${M.W} ${M.H}" preserveAspectRatio="xMidYMid meet">`;
+  s += funil(M.cx,M.bocaY,M.meiaL,M.gargY,M.gargM,M.tubo);
+  /* quem já caiu nos slides anteriores — entra pronto, sem reanimar */
+  s += `<g class="pool">` +
+       VAGAS.slice(0,cheias).map(v=>gente(v.x,v.y,1,v.r)).join('') + `</g>`;
+
+  M.B.forEach((b,i)=>{
+    const vivo = ativos.includes(i);
+    s += balde(b.x,b.y, vivo?b.rot:0, M.esc, vivo?1:0.26);
+  });
+  s += `<g class="chuva"></g>`;              /* aqui caem as pessoas, animadas */
+
+  const quantos = marcar ? 5 : n;
+  for(let i=0;i<quantos;i++) s += cartao(M.K[i], MOTOR[i], i, marcar);
+
+  /* a saída: a cliente que sentou */
+  const prontas = ativos.length>0;
+  s += gente(M.cx, M.gargY+M.tubo+44, 1.3, 0, prontas?C.vinho:C.obj, prontas?C.rosac:C.fd);
+  s += T(M.cx+78, M.gargY+M.tubo+50, 'a cliente que sentou na cadeira',
+         {a:'start',fs:19,fw:700,c:prontas?C.vinho:C.t3});
+
+  if(marcar){
+    /* o placar do exercício, no canto livre embaixo à esquerda */
+    const k = ativos.length;
+    s += `<rect x="36" y="648" width="400" height="104" rx="16" fill="${C.cartao}"
+            stroke="${k===5?C.verde:C.linha}" stroke-width="2.6"/>`;
+    s += T(58,690,'OS SEUS BALDES',{a:'start',fs:12,fw:700,c:C.t3,ls:'.17em'});
+    s += T(58,726, k+' de 5',{a:'start',fs:30,fw:700,c:k===5?C.verde:C.vinho,ls:'-.03em'});
+    s += T(150,724, LEITURA[k],{a:'start',fs:14.5,fw:600,c:C.t2});
+    /* a faixa clicável de cada ficha fica por cima de tudo */
+    MOTOR.forEach((m,i)=>{
+      const kk = M.K[i], on = ativos.includes(i);
+      s += `<g class="cx" data-i="${i}" style="cursor:pointer">
+        <rect x="${kk.x}" y="${kk.y}" width="${KW}" height="${KH}" rx="16" fill="transparent"/>
+        <rect x="${kk.x+KW-46}" y="${kk.y+18}" width="28" height="28" rx="7"
+          fill="${on?C.vinho:'#FAF9F4'}" stroke="${on?C.vinho:C.obj}" stroke-width="3"/>
+        ${on?`<path d="M${kk.x+KW-39} ${kk.y+32} l5 6 l10 -12" fill="none" stroke="#FFF"
+          stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>`:''}
+      </g>`;
+    });
+  }
+  return s + '</svg>';
+}
+
+/* ===================== 1 · o cenário ===================== */
+function cenario(){
+  const W=1600,H=860;
+  let s = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
+  s += `<path d="M800 108 V772" stroke="${C.linha}" stroke-width="2.6" stroke-dasharray="7 9"/>`;
+
+  /* --- salão A: um balde só --- */
+  const ax=406, aboca=472, amL=150, agY=640, agM=30, atubo=40;
+  s += T(ax,64,'SALÃO A',{fs:26,fw:700,c:C.tinta,ls:'.08em'});
+  s += T(ax,92,'uma fonte de cliente',{fs:17,fw:500,c:C.t2});
+  s += funil(ax,aboca,amL,agY,agM,atubo);
+  s += dentro(ax,aboca,amL,agY,agM,3,0.78);
+  s += balde(ax,300,22,0.78);
+  s += jorro(ax+40, 320, ax+6, aboca-28, 3, 0.78);
+  s += gente(ax, agY+atubo+40, 1.0, 0, C.obj, C.fd);
+  s += T(ax,784,'o funil vive com sede',{fs:19,fw:700,c:C.vermelho});
+  s += T(ax,810,'a agenda inteira depende de um balde só',{fs:15,fw:500,c:C.t2});
+
+  /* --- salão B: cinco baldes, ainda sem nome --- */
+  const bx=1194, bboca=472, bmL=182, bgY=640, bgM=36, btubo=40;
+  s += T(bx,64,'SALÃO B',{fs:26,fw:700,c:C.tinta,ls:'.08em'});
+  s += T(bx,92,'cinco fontes de cliente',{fs:17,fw:500,c:C.t2});
+  s += funil(bx,bboca,bmL,bgY,bgM,btubo);
+  s += dentro(bx,bboca,bmL,bgY,bgM,11,0.78);
+  const BB=[{dx:-212,y:328,rot: 42},{dx:-108,y:280,rot: 26},{dx:0,y:258,rot:8},
+            {dx: 108,y:280,rot:-26},{dx: 212,y:328,rot:-42}];
+  BB.forEach((b,i)=>{
+    const px = bx+b.dx;
+    s += balde(px,b.y,b.rot,0.63);
+    const rad=b.rot*Math.PI/180, lado=(b.rot>=0?46:-46)*0.63;
+    let jx = px + lado*Math.cos(rad) + 34*0.63*Math.sin(rad);
+    let jy = b.y + lado*Math.sin(rad) - 34*0.63*Math.cos(rad);
+    const alvo = bx + b.dx*0.42, ay=bboca-26, dx=alvo-jx, dy=ay-jy, d=Math.hypot(dx,dy);
+    jx += dx/d*12; jy += dy/d*12;
+    s += jorro(jx,jy,alvo,ay,3,0.66);
+  });
+  [-54,0,54].forEach((d,i)=> s += gente(bx+d, bgY+btubo+40, 1.0, 0, C.vinho, C.rosac));
+  s += T(bx,784,'o funil nunca fica vazio',{fs:19,fw:700,c:C.verde});
+  s += T(bx,810,'se um balde seca, os outros quatro seguram a agenda',{fs:15,fw:500,c:C.t2});
+  return s + '</svg>';
+}
+
+/* ===================== montagem =====================
+   PLANO[idx] diz, por slide: quantos baldes estão virando, quantas pessoas
+   JÁ estavam no funil quando o slide abriu, e até onde ele enche.          */
+const PLANO = [null,
+  {n:1, de:0,  ate:4},  {n:2, de:4,  ate:8},   {n:3, de:8,  ate:12},
+  {n:4, de:12, ate:16}, {n:5, de:16, ate:19},  {n:5, de:19, ate:LOTADO},
+  null];
+document.getElementById('arte1').innerHTML = cenario();
+PLANO.forEach((p,idx)=>{ if(p) document.getElementById('arte'+(idx+1)).innerHTML =
+  mapa(p.n,{cheias:p.de}); });
+
+/* ===================== a chuva de gente =====================
+   Cada pessoa sai da boca do balde, voa até a boca do funil e desce até a
+   sua vaga. Quando todas as vagas do slide estão ocupadas, os baldes seguem
+   gotejando — quem chega depois é absorvido pela massa.                     */
+let raf = null;
+function paraAnim(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+
+function voo(b,destino,u,desvio){
+  const M=MAPA, E=M.esc, rad=b.rot*Math.PI/180, lado=(b.rot>=0?46:-46)*E;
+  let sx = b.x + lado*Math.cos(rad) + 34*E*Math.sin(rad);
+  let sy = b.y + lado*Math.sin(rad) - 34*E*Math.cos(rad);
+  const mx = b.alvo + desvio, my = destino ? M.bocaY-26 : M.bocaY+26;
+  /* nasce já FORA da boca: pessoa em cima do desenho do balde não pode */
+  const d0 = Math.hypot(mx-sx, my-sy);
+  sx += (mx-sx)/d0*26; sy += (my-sy)/d0*26;
+  const quad = t => { const qx=sx+(mx-sx)*0.62, qy=sy+(my-sy)*0.12;
+    return [(1-t)*(1-t)*sx+2*(1-t)*t*qx+t*t*mx, (1-t)*(1-t)*sy+2*(1-t)*t*qy+t*t*my]; };
+  if(!destino) return quad(u);
+  if(u<0.62) return quad(u/0.62);
+  const t=(u-0.62)/0.38, e=t*t*0.72+t*0.28;
+  return [mx+(destino.x-mx)*t, my+(destino.y-my)*e];
+}
+
+/* Cada balde tem o seu próprio relógio e despeja até as vagas do slide
+   acabarem. Aí a queda TERMINA e a cena fica parada, com o funil cheio —
+   não é um loop (ela, 16/11: «caiu, depois finaliza»).                      */
+const INTERVALO = 540;                    /* ms entre duas pessoas do MESMO balde */
+function animaSlide(idx, ativos, de, ate){
+  paraAnim();
+  const svg = S[idx] && S[idx].querySelector('svg'); if(!svg) return;
+  const chuva = svg.querySelector('.chuva'), pool = svg.querySelector('.pool');
+  if(!chuva || !pool) return;
+  chuva.innerHTML='';
+  const baldes = ativos.map(i=>MAPA.B[i]);
+  if(!baldes.length) return;
+  const fila = VAGAS.slice(de,ate);
+  let prox = 0, contador = 0;
+  const parts = [];
+  /* os baldes saem escalonados para a chuva não vir em bloco */
+  const ultimo = baldes.map((_,k)=> -INTERVALO + k*(INTERVALO/baldes.length));
+  const t00 = performance.now();
+  const passo = agora => {
+    const t = agora - t00;
+    /* enquanto houver vaga, cada balde solta mais uma; depois disso, acabou */
+    baldes.forEach((b,k)=>{
+      if(prox < fila.length && t - ultimo[k] >= INTERVALO){
+        ultimo[k] = t;
+        parts.push({b, v:fila[prox++], t0:t, dur:1950,
+                    dv:(rnd(contador*3.7)-0.5)*54, gi:contador++});
+      }
+    });
+    for(let j=parts.length-1;j>=0;j--){
+      const p = parts[j], u = (t-p.t0)/p.dur;
+      if(u<0) continue;
+      if(!p.el){
+        p.el = document.createElementNS('http://www.w3.org/2000/svg','g');
+        p.el.innerHTML = gente(0,0,1,0);
+        chuva.appendChild(p.el);
+      }
+      if(u>=1){
+        p.el.remove();
+        if(p.v) pool.insertAdjacentHTML('beforeend', gente(p.v.x,p.v.y,1,p.v.r));
+        parts.splice(j,1);                /* morta sai da lista, não pesa o loop */
+        continue;
+      }
+      const [x,y] = voo(p.b,p.v,u,p.dv);
+      p.el.setAttribute('transform',
+        `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(Math.sin(u*5+p.gi)*10).toFixed(1)})
+         scale(${(0.82+u*0.2).toFixed(3)})`);
+    }
+    /* encheu e a última pousou: a animação acaba aqui */
+    if(prox >= fila.length && !parts.length){ raf=null; return; }
+    raf = requestAnimationFrame(passo);
+  };
+  raf = requestAnimationFrame(passo);
+}
+
+/* ===================== 8 · o exercício do dia ===================== */
+let marcados = [];
+function pintaExercicio(){
+  const el = document.getElementById('arte8');
+  el.innerHTML = mapa(5,{marcar:true, ativos:marcados, cheias:0});
+  el.querySelectorAll('.cx').forEach(g=>{
+    g.addEventListener('click', e=>{
+      e.stopPropagation();
+      const k = +g.dataset.i;
+      marcados = marcados.includes(k) ? marcados.filter(x=>x!==k) : [...marcados,k].sort();
+      pintaExercicio();
+      if(i===7) animaSlide(7, marcados, 0,
+        Math.min(LOTADO, marcados.length>=5 ? LOTADO : marcados.length*4));
+    });
+  });
+}
+
+/* ===================== deck ===================== */
+const S = [...document.querySelectorAll('.s')];
+const TIT = ['o cenário · um balde contra cinco',
+             '1 · GEO / AEO','2 · mídia paga','3 · creators','4 · conteúdo','5 · retargeting',
+             'o mapa da aquisição','o diagnóstico · quantos estão virados na sua?'];
+let i = 0;
+function mostra(n){
+  i = Math.max(0, Math.min(S.length-1, n));
+  S.forEach((s,k)=>s.classList.toggle('ativo', k===i));
+  document.getElementById('barra').style.width = (i/(S.length-1)*100)+'%';
+  document.getElementById('rodE').textContent = TIT[i];
+  document.getElementById('ct').innerHTML = '<b>'+(i+1)+'</b> / '+S.length;
+  document.getElementById('inicio').classList.toggle('ver', i>0);
+  pintaTudo();
+  /* a chuva recomeça a cada entrada no slide */
+  paraAnim();
+  const p = PLANO[i];
+  if(p) animaSlide(i, [0,1,2,3,4].slice(0,p.n), p.de, p.ate);
+  else if(i===7) animaSlide(7, marcados, 0,
+    Math.min(LOTADO, marcados.length>=5 ? LOTADO : marcados.length*4));
+}
+const vai = d => mostra(i+d);
+
+/* ===================== caneta ===================== */
+const cv = document.getElementById('tela'), cx2 = cv.getContext('2d');
+const riscos = S.map(()=>[]);
+let desenhando=false, modo=false, cor='#7A2846', grosso=false, atual=null;
+function dim(){
+  const r = devicePixelRatio || 1;
+  cv.width = innerWidth*r; cv.height = innerHeight*r;
+  cv.style.width = innerWidth+'px'; cv.style.height = innerHeight+'px';
+  cx2.setTransform(r,0,0,r,0,0); pintaTudo();
+}
+function pintaTudo(){ cx2.clearRect(0,0,innerWidth,innerHeight); for(const t of riscos[i]) traca(t); }
+function traca(t){
+  if(t.p.length<2){ cx2.beginPath(); cx2.fillStyle=t.c;
+    cx2.arc(t.p[0][0]*innerWidth,t.p[0][1]*innerHeight,t.w/2,0,6.3); cx2.fill(); return; }
+  cx2.beginPath(); cx2.strokeStyle=t.c; cx2.lineWidth=t.w; cx2.lineCap='round'; cx2.lineJoin='round';
+  cx2.globalAlpha=t.a;
+  cx2.moveTo(t.p[0][0]*innerWidth,t.p[0][1]*innerHeight);
+  for(let k=1;k<t.p.length;k++) cx2.lineTo(t.p[k][0]*innerWidth,t.p[k][1]*innerHeight);
+  cx2.stroke(); cx2.globalAlpha=1;
+}
+function liga(v){
+  modo=v; document.body.classList.toggle('desenho',modo);
+  const b=document.getElementById('bLig');
+  b.classList.toggle('on',modo); b.textContent = modo?'desenhando':'desenhar';
+}
+const pos = e => { const t = e.touches?e.touches[0]:e; return [t.clientX/innerWidth, t.clientY/innerHeight]; };
+function comeca(e){ if(!modo) return; e.preventDefault(); desenhando=true;
+  atual={c:cor,w:grosso?20:4,a:grosso?.45:1,p:[pos(e)]}; riscos[i].push(atual); }
+function anda(e){ if(!modo||!desenhando) return; e.preventDefault(); atual.p.push(pos(e)); pintaTudo(); }
+const para = ()=>{ desenhando=false; atual=null; };
+cv.addEventListener('mousedown',comeca); cv.addEventListener('touchstart',comeca,{passive:false});
+addEventListener('mousemove',anda); cv.addEventListener('touchmove',anda,{passive:false});
+addEventListener('mouseup',para); addEventListener('touchend',para);
+document.getElementById('bLig').onclick = e=>{ e.stopPropagation(); liga(!modo); };
+document.getElementById('bApaga').onclick = e=>{ e.stopPropagation(); riscos[i]=[]; pintaTudo(); };
+document.querySelectorAll('#caixa [data-cor]').forEach(b=>{
+  b.onclick = e=>{ e.stopPropagation();
+    document.querySelectorAll('#caixa [data-cor]').forEach(o=>o.classList.remove('sel'));
+    b.classList.add('sel'); cor=b.dataset.cor; grosso=!!b.dataset.grosso; if(!modo) liga(true); };
+});
+document.getElementById('caixa').addEventListener('mousedown', e=>e.stopPropagation());
+document.getElementById('inicio').onclick = e=>{ e.stopPropagation(); mostra(0); };
+
+/* ===================== navegação ===================== */
+const ehControle = el => el && el.closest && el.closest('input,button,select,textarea,#caixa,#pag,.cx');
+addEventListener('click', e=>{ if(modo) return; if(ehControle(e.target)) return; vai(1); });
+addEventListener('keydown', e=>{
+  const k=e.key;
+  if(k==='ArrowRight'||k==='PageDown'||k===' '){ e.preventDefault(); vai(1); }
+  else if(k==='ArrowLeft'||k==='PageUp'){ e.preventDefault(); vai(-1); }
+  else if(k==='d'||k==='D') liga(!modo);
+  else if(k==='e'||k==='E'){ riscos[i]=[]; pintaTudo(); }
+  else if(k==='Escape') liga(false);
+  else if(k==='1'||k==='2'||k==='3') document.querySelectorAll('#caixa [data-cor]')[+k-1].click();
+  else if(k==='Home'||k==='Backspace'){ e.preventDefault(); mostra(0); }
+});
+addEventListener('resize', dim);
+
+/* ===================== início ===================== */
+dim();
+pintaExercicio();
+mostra(Math.max(0,(parseInt(new URLSearchParams(location.search).get('s'),10)||1)-1));
+</script>
+</body></html>
