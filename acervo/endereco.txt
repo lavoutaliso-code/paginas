@@ -1,1 +1,1 @@
-https://asia-instant-warriors-serving.trycloudflare.com
+https://api.trycloudflare.com
