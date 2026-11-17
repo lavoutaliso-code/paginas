@@ -1,1 +1,1 @@
-https://trust-cycle-bias-spa.trycloudflare.com
+https://api.trycloudflare.com
