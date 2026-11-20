@@ -1,1 +1,1 @@
-https://fleet-differential-instructional-visiting.trycloudflare.com
+https://api.trycloudflare.com
