@@ -1,1 +1,1 @@
-https://patients-agents-lat-postal.trycloudflare.com
+https://api.trycloudflare.com
