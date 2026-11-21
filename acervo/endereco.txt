@@ -1,1 +1,1 @@
-https://universities-virtual-pet-documents.trycloudflare.com
+https://api.trycloudflare.com
