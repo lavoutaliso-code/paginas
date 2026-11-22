@@ -1,1 +1,1 @@
-https://api.trycloudflare.com
+https://gibraltar-range-efficient-export.trycloudflare.com
