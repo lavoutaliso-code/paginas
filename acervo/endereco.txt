@@ -1,1 +1,1 @@
-https://compromise-radio-effective-legends.trycloudflare.com
+https://api.trycloudflare.com
