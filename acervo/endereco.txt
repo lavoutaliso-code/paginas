@@ -1,1 +1,1 @@
-https://advantage-proudly-primary-jet.trycloudflare.com
+https://api.trycloudflare.com
