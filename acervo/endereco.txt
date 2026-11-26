@@ -1,1 +1,1 @@
-https://postings-gates-saves-champions.trycloudflare.com
+https://api.trycloudflare.com
